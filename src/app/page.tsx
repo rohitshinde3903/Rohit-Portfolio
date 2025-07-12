@@ -1,16 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import Hero from './components/home/hero';
-import { GridPattern } from './components/ui/grid-pattern';
-import { cn } from '@/lib/utils';
-import Skills from './components/about/Skills';
-import AchievementGrid from './components/about/Timeline';
-import InsightsSection from './components/insights';
-import { AboutMe } from './components/about-me';
 import dynamic from 'next/dynamic';
+import { cn } from '@/lib/utils';
+import { GridPattern } from './components/ui/grid-pattern';
 
-// Disable SSR for dynamic components using client-only features
+// Load all components dynamically to prevent SSR issues
+const Hero = dynamic(() => import('./components/home/hero'), { ssr: false });
+const Skills = dynamic(() => import('./components/about/Skills'), { ssr: false });
+const AchievementGrid = dynamic(() => import('./components/about/Timeline'), { ssr: false });
+const InsightsSection = dynamic(() => import('./components/insights'), { ssr: false });
+const AboutMe = dynamic(() => import('./components/about-me'), { ssr: false });
 const AwesomeContact = dynamic(() => import('./components/layout/Footer'), { ssr: false });
 const ThankYouSection = dynamic(() => import('./components/Thankyou'), { ssr: false });
 
@@ -21,7 +21,6 @@ export default function Home() {
     const timer = setTimeout(() => {
       setShowContent(true);
     }, 2000);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -36,16 +35,7 @@ export default function Home() {
           y={-1}
           strokeDasharray="1 0"
           className="absolute inset-0 h-full w-full skew-y-12 fill-transparent stroke-white/20"
-          squares={[
-            [0, 0],
-            [1, 3],
-            [2, 1],
-            [4, 2],
-            [6, 3],
-            [8, 1],
-            [10, 2],
-            [12, 3],
-          ]}
+          squares={[[0, 0],[1, 3],[2, 1],[4, 2],[6, 3],[8, 1],[10, 2],[12, 3]]}
         />
       </div>
 
@@ -68,19 +58,9 @@ export default function Home() {
                 y={-1}
                 strokeDasharray="1 0"
                 className="absolute inset-0 h-full w-full skew-y-12 fill-transparent stroke-white/0"
-                squares={[
-                  [0, 0],
-                  [1, 3],
-                  [2, 1],
-                  [4, 2],
-                  [6, 3],
-                  [8, 1],
-                  [10, 2],
-                  [12, 3],
-                ]}
+                squares={[[0, 0],[1, 3],[2, 1],[4, 2],[6, 3],[8, 1],[10, 2],[12, 3]]}
               />
             </div>
-
             <div className="relative z-0 bg-transparent">
               <Hero />
             </div>
