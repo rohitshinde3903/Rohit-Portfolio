@@ -233,7 +233,8 @@ const ProjectCard = () => {
             <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl border border-gray-800 overflow-hidden hover:border-purple-500/30 transition-all">
               <div className="p-6">
                 <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4">
-                  <p className="text-purple-500" size={24} />
+                  <Code className="text-purple-500" size={24} />
+
                 </div>
                 <h4 className="text-xl font-bold text-white mb-2">Cloud-Based Analytics Dashboard</h4>
                 <p className="text-gray-400 mb-4">Real-time data visualization platform with interactive charts</p>
