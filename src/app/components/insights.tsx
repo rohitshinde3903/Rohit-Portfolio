@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Code, Cloud, Lock } from "lucide-react";
 import { Github, ExternalLink, ArrowRight, Sparkles, Lock, User } from 'lucide-react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
