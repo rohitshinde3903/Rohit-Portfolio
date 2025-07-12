@@ -1,33 +1,33 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import Hero from './components/home/hero'
-import { GridPattern } from './components/ui/grid-pattern'
-import { cn } from '@/lib/utils'
-import Skills from './components/about/Skills'
-import AchievementGrid from './components/about/Timeline'
-import InsightsSection from './components/insights'
-import { AboutMe } from './components/about-me'
-import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react';
+import Hero from './components/home/hero';
+import { GridPattern } from './components/ui/grid-pattern';
+import { cn } from '@/lib/utils';
+import Skills from './components/about/Skills';
+import AchievementGrid from './components/about/Timeline';
+import InsightsSection from './components/insights';
+import { AboutMe } from './components/about-me';
+import dynamic from 'next/dynamic';
+
+// Disable SSR for dynamic components using client-only features
 const AwesomeContact = dynamic(() => import('./components/layout/Footer'), { ssr: false });
-
-// Dynamically import ThankYouSection without SSR
-const ThankYouSection = dynamic(() => import('./components/Thankyou'), { ssr: false })
+const ThankYouSection = dynamic(() => import('./components/Thankyou'), { ssr: false });
 
 export default function Home() {
-  const [showContent, setShowContent] = useState(false)
+  const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowContent(true)
-    }, 2000)
+      setShowContent(true);
+    }, 2000);
 
-    return () => clearTimeout(timer)
-  }, [])
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Grid Pattern Background */}
+      {/* Background Grid */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <GridPattern
           width={40}
@@ -49,20 +49,16 @@ export default function Home() {
         />
       </div>
 
-      {/* Main Content */}
+      {/* Main */}
       <main className="relative z-10">
         {!showContent && (
           <div className="fixed inset-0 flex items-center justify-center bg-black z-50">
-            <div className="text-white text-2xl">Loading...</div>
+            <div className="text-white text-2xl animate-pulse">Loading...</div>
           </div>
         )}
-        <div
-          className={cn(
-            'transition-opacity duration-1000',
-            showContent ? 'opacity-100' : 'opacity-0'
-          )}
-        >
-          {/* Hero Section with transparent background */}
+
+        <div className={cn('transition-opacity duration-1000', showContent ? 'opacity-100' : 'opacity-0')}>
+          {/* Hero Section */}
           <div className="relative">
             <div className="absolute inset-0 z-0">
               <GridPattern
@@ -84,28 +80,31 @@ export default function Home() {
                 ]}
               />
             </div>
-           
+
             <div className="relative z-0 bg-transparent">
               <Hero />
             </div>
           </div>
 
+          {/* About Section */}
           <section className="container mx-auto py-12 relative z-20">
             <AboutMe />
           </section>
+
+          {/* Insights */}
           <InsightsSection />
+
+          {/* Skills, Timeline, Footer */}
           <div className="relative z-20">
             <div className="bg-black/80 backdrop-blur-sm">
               <Skills />
             </div>
             <AchievementGrid />
-            
-            {/* Dynamically loaded ThankYouSection */}
             <ThankYouSection />
             <AwesomeContact />
           </div>
         </div>
       </main>
     </div>
-  )
+  );
 }
