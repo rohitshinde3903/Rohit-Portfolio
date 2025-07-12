@@ -10,7 +10,7 @@ const Hero = dynamic(() => import('./components/home/hero'), { ssr: false });
 const Skills = dynamic(() => import('./components/about/Skills'), { ssr: false });
 const AchievementGrid = dynamic(() => import('./components/about/Timeline'), { ssr: false });
 const InsightsSection = dynamic(() => import('./components/insights'), { ssr: false });
-const AboutMe = dynamic(() => import('./components/about-me'), { ssr: false });
+const AboutMe = dynamic(() => import('./components/about-me').then(mod => mod.AboutMe), { ssr: false });
 const AwesomeContact = dynamic(() => import('./components/layout/Footer'), { ssr: false });
 const ThankYouSection = dynamic(() => import('./components/Thankyou'), { ssr: false });
 
