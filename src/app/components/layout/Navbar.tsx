@@ -20,22 +20,25 @@ function Logo() {
         Rohitt
       </h1>
     </div>
-  );
+  )
 }
-
-
-
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [activeLink, setActiveLink] = useState('#Hero')
+  const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10)
-      
-      // Update active link based on scroll position
+      const scrollTop = window.scrollY
+      const docHeight = document.body.scrollHeight - window.innerHeight
+      const scrolled = (scrollTop / docHeight) * 100
+      setScrollProgress(scrolled)
+
+      setScrolled(scrollTop > 10)
+
+      // Highlight active nav item
       navigation.forEach((item) => {
         const section = document.querySelector(item.href)
         if (section) {
@@ -58,13 +61,12 @@ export function Navbar() {
     )}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-
-          {/* Logo (left) */}
+          {/* Logo */}
           <a href="#" className="flex-shrink-0">
             <Logo />
           </a>
 
-          {/* Desktop Centered Menu */}
+          {/* Desktop Nav */}
           <div className="hidden md:flex justify-center flex-1">
             <div className="flex space-x-1 relative">
               {navigation.map((item) => (
@@ -90,7 +92,7 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Mobile Hamburger */}
+          {/* Hamburger Menu */}
           <div className="flex md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -142,12 +144,11 @@ export function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Scroll Progress Indicator */}
+      {/* Scroll Progress */}
       <motion.div 
         className="h-0.5 bg-gradient-to-r from-purple-500 to-blue-500"
-        initial={{ width: 0 }}
-        animate={{ width: `${(window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100}%` }}
-        transition={{ duration: 0.3 }}
+        animate={{ width: `${scrollProgress}%` }}
+        transition={{ duration: 0.2 }}
       />
     </header>
   )
