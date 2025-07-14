@@ -63,45 +63,66 @@ const AwesomeContact = () => {
     setTimeout(() => setCopied(null), 2000);
   }, [showToast]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSending(true);
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setIsSending(true);
+  
+  try {
+    // Send contact info to yourself
+    await emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_OWNER,
+      {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || 'Not provided',
+        message: formData.message
+      },
+      EMAILJS_USER_ID
+    );
     
-    try {
-      // Send contact info to yourself
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_OWNER,
-        {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || 'Not provided',
-          message: formData.message
-        },
-        EMAILJS_USER_ID
-      );
-      
-      // Send auto-reply to the sender
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_USER,
-        {
-          to_email: formData.email,
-          name: formData.name,
-          message: formData.message
-        },
-        EMAILJS_USER_ID
-      );
-      
-      showToast('Message sent successfully!');
-      setFormData({ name: '', email: '', phone: '', message: '' });
-    } catch (error) {
-      console.error('EmailJS error details:', error);
-      showToast('Failed to send message. Please try again.', 'error');
-    } finally {
-      setIsSending(false);
+    // Send auto-reply to the sender
+    await emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_USER,
+      {
+        to_email: formData.email,
+        name: formData.name,
+        message: formData.message
+      },
+      EMAILJS_USER_ID
+    );
+    
+    showToast('Message sent successfully!');
+    setFormData({ name: '', email: '', phone: '', message: '' });
+  } catch (error) {
+    console.error('EmailJS error details:', error);
+    
+    // Handle specific EmailJS error cases
+    let errorMessage = 'Failed to send message. Please try again.';
+    
+    if (error instanceof Error) {
+      // Network error
+      if (error.message.includes('Network Error')) {
+        errorMessage = 'Network error. Please check your internet connection.';
+      }
+      // EmailJS specific errors
+      else if (error.message.includes('400')) {
+        errorMessage = 'Invalid request. Please check your form data.';
+      }
+      else if (error.message.includes('4')) {
+        errorMessage = 'Client error. Please contact support.';
+      }
+      else if (error.message.includes('5')) {
+        errorMessage = 'Server error. Please try again later.';
+      }
     }
-  };
+    
+    showToast(errorMessage, 'error');
+  } finally {
+    setIsSending(false);
+  }
+};
 
   // Fixed TiltCard component that won't cause re-renders on input change
   const TiltCard = useCallback(({ children, className }: { children: React.ReactNode, className?: string }) => {
