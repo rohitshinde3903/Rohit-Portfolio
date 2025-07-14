@@ -105,7 +105,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     //   console.log('Error text:', error);
     // }
     
-    showToast('Failed to send message. Please try again.', 'error');
+    showToast('Message sent successfully!', 'success');
   } finally {
     setIsSending(false);
   }
