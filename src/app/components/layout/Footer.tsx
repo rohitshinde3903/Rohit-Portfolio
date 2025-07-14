@@ -43,7 +43,7 @@ const AwesomeContact = () => {
     {
       icon: <FileText className="w-5 h-5" />,
       label: "Resume",
-      href: "#",
+      href: "RohitShindeResume7499273903.pdf",
       color: "hover:text-cyan-500",
       handle: "Download PDF",
       bgHover: "group-hover:bg-cyan-500/10"
