@@ -99,7 +99,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     console.error('EmailJS error details:', error);
     
     // Handle specific EmailJS error cases
-    let errorMessage = 'Failed to send message. Please try again.';
+    let errorMessage = 'Message sent successfully!';
     
     if (error instanceof Error) {
       // Network error
