@@ -249,11 +249,12 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                   <input
                     type="tel"
                     name="phone"
-                    placeholder="Phone Number (Optional)"
+                    placeholder="Phone Number"
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-                  />
+                    required
+                    />
                 </div>
                 <div>
                   <textarea
