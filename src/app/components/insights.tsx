@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 const ProjectCard = () => {
   const [activeProject, setActiveProject] = useState(0);
   
-  // Projects data from your resume
+  // Projects data with image paths
   const projects = [
     {
       title: "Electronic Voting Software Powered by AI",
@@ -20,8 +20,9 @@ const ProjectCard = () => {
         "Designed user-friendly interfaces with real-time vote tracking",
         "Ensured data privacy and system integrity throughout the process"
       ],
-      githubUrl: "#",
-      liveUrl: "#"
+      githubUrl: "https://github.com/rohitshinde3903/EVS-Flask.git",
+      liveUrl: "#",
+      image: "/images/evs.png" // Added image path
     },
     {
       title: "PROFO: Profile Manager",
@@ -33,8 +34,9 @@ const ProjectCard = () => {
         "Privacy controls for public/private content management",
         "Secured with login and authentication to keep data safe"
       ],
-      githubUrl: "#",
-      liveUrl: "#"
+      githubUrl: "https://github.com/rohitshinde3903/PROFO.git",
+      liveUrl: "#",
+      image: "/images/profo.png" // Added image path
     }
   ];
 
@@ -134,9 +136,16 @@ const ProjectCard = () => {
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black z-10" />
               <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-blue-900/20 z-0" />
               
-              {/* Placeholder for project image */}
+              {/* Actual project image */}
               <div className="relative h-full w-full flex items-center justify-center">
-                <div className="bg-gray-800 border-2 border-dashed border-gray-700 rounded-xl w-4/5 h-4/5" />
+                <Image
+                  src={projects[activeProject].image}
+                  alt={projects[activeProject].title}
+                  layout="fill"
+                  objectFit="cover"
+                  className="object-cover"
+                  quality={90}
+                />
                 <div className="absolute z-20 bottom-4 left-4 flex gap-2">
                   {projects[activeProject].githubUrl && (
                     <a
@@ -236,7 +245,6 @@ const ProjectCard = () => {
               <div className="p-6">
                 <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4">
                   <Code className="text-purple-500" size={24} />
-
                 </div>
                 <h4 className="text-xl font-bold text-white mb-2">Cloud-Based Analytics Dashboard</h4>
                 <p className="text-gray-400 mb-4">Real-time data visualization platform with interactive charts</p>
