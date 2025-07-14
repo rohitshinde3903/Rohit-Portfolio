@@ -63,20 +63,21 @@ const AwesomeContact = () => {
     setTimeout(() => setCopied(null), 2000);
   }, [showToast]);
 
+
 const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setIsSending(true);
   
   try {
-    // Send contact info to yourself
+    // Send contact info to yourself with correct template variables
     await emailjs.send(
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_OWNER,
       {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone || 'Not provided',
-        message: formData.message
+        from_name: formData.name,    // Matches {{from_name}} in template
+        from_email: formData.email,  // Matches {{from_email}} in template
+        from_phone: formData.phone || 'Not provided', // Matches {{from_phone}}
+        message: formData.message    // Matches {{message}}
       },
       EMAILJS_USER_ID
     );
@@ -98,27 +99,13 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   } catch (error) {
     console.error('EmailJS error details:', error);
     
-    // Handle specific EmailJS error cases
-    let errorMessage = 'Message sent successfully!';
-    
+    // Enhanced error logging
     if (error instanceof Error) {
-      // Network error
-      if (error.message.includes('Network Error')) {
-        errorMessage = 'Network error. Please check your internet connection.';
-      }
-      // EmailJS specific errors
-      else if (error.message.includes('400')) {
-        errorMessage = 'Invalid request. Please check your form data.';
-      }
-      else if (error.message.includes('4')) {
-        errorMessage = 'Client error. Please contact support.';
-      }
-      else if (error.message.includes('5')) {
-        errorMessage = 'Server error. Please try again later.';
-      }
+      console.log('Error status:', error.status);
+      console.log('Error text:', error.text);
     }
     
-    showToast(errorMessage, 'error');
+    showToast('Failed to send message. Please try again.', 'error');
   } finally {
     setIsSending(false);
   }
