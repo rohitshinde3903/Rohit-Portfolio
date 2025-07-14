@@ -98,7 +98,7 @@ const SkillsSection = () => {
         </div>
         
         {/* Skills Grid - 2 columns on mobile */}
-{/*         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 mb-12 sm:mb-20">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 mb-12 sm:mb-20">
           {categorizedSkills[activeCategory].map((skill, index) => (
             <motion.div
               key={index}
@@ -123,7 +123,7 @@ const SkillsSection = () => {
               <p className="text-gray-500 text-xs text-right">{skill.level}%</p>
             </motion.div>
           ))}
-        </div> */}
+        </div> 
         
         {/* Certifications */}
         <div className="text-center mb-8 sm:mb-10">
