@@ -100,10 +100,10 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     console.error('EmailJS error details:', error);
     
     // Enhanced error logging
-    if (error instanceof Error) {
-      console.log('Error status:', error.status);
-      console.log('Error text:', error.text);
-    }
+    // if (error instanceof Error) {
+    //   console.log('Error status:', error);
+    //   console.log('Error text:', error);
+    // }
     
     showToast('Failed to send message. Please try again.', 'error');
   } finally {
