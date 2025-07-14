@@ -10,7 +10,17 @@ import {
   SiGithub, SiPostgresql, SiFirebase, SiTypescript, SiVercel, SiDjango
 } from 'react-icons/si';
 
-const categorizedSkills = {
+// 👇 Explicit typing for categorizedSkills
+type Skill = {
+  name: string;
+  info: string;
+  icon: JSX.Element;
+  level: number;
+};
+
+type Category = 'Languages & Frameworks' | 'Cloud & DevOps' | 'AI & Data' | 'Databases';
+
+const categorizedSkills: Record<Category, Skill[]> = {
   "Languages & Frameworks": [
     { name: 'Python', info: 'Advanced scripting & backend development', icon: <FaPython className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400" />, level: 90 },
     { name: 'JavaScript', info: 'Modern web development', icon: <FaJsSquare className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-300" />, level: 95 },
@@ -38,6 +48,7 @@ const categorizedSkills = {
   ]
 };
 
+// ✅ No changes to certifications structure
 const certifications = [
   {
     title: 'Python Full Stack',
@@ -84,11 +95,11 @@ const SkillsSection = () => {
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`flex-shrink-0 px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
+                className={flex-shrink-0 px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
                   activeCategory === category
                     ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'
                     : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                }`}
+                }}
               >
                 {category.split(' ')[0]} {/* Show only first word on small screens */}
                 <span className="hidden sm:inline"> {category.split(' ').slice(1).join(' ')}</span>
@@ -117,7 +128,7 @@ const SkillsSection = () => {
               <div className="w-full bg-gray-800 rounded-full h-1.5 sm:h-2 mb-1">
                 <div 
                   className="bg-gradient-to-r from-purple-500 to-blue-500 h-full rounded-full"
-                  style={{ width: `${skill.level}%` }}
+                  style={{ width: ${skill.level}% }}
                 />
               </div>
               <p className="text-gray-500 text-xs text-right">{skill.level}%</p>
@@ -208,7 +219,7 @@ const SkillsSection = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style jsx>{
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
         }
@@ -216,9 +227,7 @@ const SkillsSection = () => {
           -ms-overflow-style: none;
           scrollbar-width: none;
         }
-      `}</style>
+      }</style>
     </div>
   );
 };
-
-export default SkillsSection;
