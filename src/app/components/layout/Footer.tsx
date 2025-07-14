@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { 
   Github, 
@@ -6,7 +6,6 @@ import {
   Send,
   Copy,
   Check,
-  ExternalLink,
   X,
   Linkedin,
   Phone,
@@ -36,39 +35,33 @@ const AwesomeContact = () => {
       icon: <Github className="w-5 h-5" />,
       label: "GitHub",
       href: "https://github.com/rohitshinde3903",
-      color: "hover:text-purple-500",
-      handle: "@rohitshinde3903",
       bgHover: "group-hover:bg-purple-500/10"
     },
     {
       icon: <Linkedin className="w-5 h-5" />,
       label: "LinkedIn",
       href: "https://linkedin.com/in/rohitshinde3903",
-      color: "hover:text-blue-500",
-      handle: "Rohit Shinde",
       bgHover: "group-hover:bg-blue-500/10"
     },
     {
       icon: <FileText className="w-5 h-5" />,
       label: "Resume",
       href: "RohitShindeResume7499273903.pdf",
-      color: "hover:text-cyan-500",
-      handle: "Download PDF",
       bgHover: "group-hover:bg-cyan-500/10"
     }
   ];
 
-  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+  const showToast = useCallback((message: string, type: 'success' | 'error' = 'success') => {
     setToast({ show: true, message, type });
     setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
-  };
+  }, []);
 
-  const handleCopy = (text: string, type: string) => {
+  const handleCopy = useCallback((text: string, type: string) => {
     navigator.clipboard.writeText(text);
     setCopied(type);
     showToast('Copied to clipboard!');
     setTimeout(() => setCopied(null), 2000);
-  };
+  }, [showToast]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -103,14 +96,15 @@ const AwesomeContact = () => {
       showToast('Message sent successfully!');
       setFormData({ name: '', email: '', phone: '', message: '' });
     } catch (error) {
-      console.error('Failed to send email:', error);
+      console.error('EmailJS error details:', error);
       showToast('Failed to send message. Please try again.', 'error');
     } finally {
       setIsSending(false);
     }
   };
 
-  const TiltCard = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+  // Fixed TiltCard component that won't cause re-renders on input change
+  const TiltCard = useCallback(({ children, className }: { children: React.ReactNode, className?: string }) => {
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
@@ -120,7 +114,7 @@ const AwesomeContact = () => {
     const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
     const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       const rect = e.currentTarget.getBoundingClientRect();
       const width = rect.width;
       const height = rect.height;
@@ -130,7 +124,12 @@ const AwesomeContact = () => {
       const yPct = mouseY / height - 0.5;
       x.set(xPct);
       y.set(yPct);
-    };
+    }, [x, y]);
+
+    const handleMouseLeave = useCallback(() => {
+      x.set(0);
+      y.set(0);
+    }, [x, y]);
 
     return (
       <motion.div
@@ -140,16 +139,13 @@ const AwesomeContact = () => {
           transformStyle: "preserve-3d",
         }}
         onMouseMove={handleMouseMove}
-        onMouseLeave={() => {
-          x.set(0);
-          y.set(0);
-        }}
+        onMouseLeave={handleMouseLeave}
         className={`transform-gpu ${className}`}
       >
         {children}
       </motion.div>
     );
-  };
+  }, []);
 
   const Toast = () => (
     <motion.div
@@ -169,6 +165,12 @@ const AwesomeContact = () => {
       <span>{toast.message}</span>
     </motion.div>
   );
+
+  // Handle form input changes
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  }, []);
 
   return (
     <section id="contact" className="py-20 bg-gradient-to-b from-black via-gray-900 to-black px-4">
@@ -215,9 +217,10 @@ const AwesomeContact = () => {
                   <div>
                     <input
                       type="text"
+                      name="name"
                       placeholder="Your Name"
                       value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                       required
                     />
@@ -225,9 +228,10 @@ const AwesomeContact = () => {
                   <div>
                     <input
                       type="email"
+                      name="email"
                       placeholder="Your Email"
                       value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                       required
                     />
@@ -236,17 +240,19 @@ const AwesomeContact = () => {
                 <div>
                   <input
                     type="tel"
+                    name="phone"
                     placeholder="Phone Number (Optional)"
                     value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    onChange={handleInputChange}
                     className="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                   />
                 </div>
                 <div>
                   <textarea
+                    name="message"
                     placeholder="Tell me about your project..."
                     value={formData.message}
-                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                    onChange={handleInputChange}
                     rows={4}
                     className="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                     required
