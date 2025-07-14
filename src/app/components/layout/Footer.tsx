@@ -12,6 +12,7 @@ import {
   Phone,
   FileText
 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 const AwesomeContact = () => {
   const [copied, setCopied] = useState<string | null>(null);
@@ -21,7 +22,14 @@ const AwesomeContact = () => {
     phone: '',
     message: ''
   });
-  const [toast, setToast] = useState({ show: false, message: '' });
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const [isSending, setIsSending] = useState(false);
+
+  // EmailJS credentials
+  const EMAILJS_SERVICE_ID = 'service_aky6vwe';
+  const EMAILJS_TEMPLATE_OWNER = 'template_j5p9rpf'; // Contact Us template (to you)
+  const EMAILJS_TEMPLATE_USER = 'template_pxnoyms';   // Auto-Reply template (to sender)
+  const EMAILJS_USER_ID = 'PLnsOuh3M-Hq4QRMJ';        // Public Key
 
   const socialLinks = [
     {
@@ -50,9 +58,9 @@ const AwesomeContact = () => {
     }
   ];
 
-  const showToast = (message: string) => {
-    setToast({ show: true, message });
-    setTimeout(() => setToast({ show: false, message: '' }), 3000);
+  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
   };
 
   const handleCopy = (text: string, type: string) => {
@@ -62,10 +70,44 @@ const AwesomeContact = () => {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    showToast('Message sent successfully!');
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    setIsSending(true);
+    
+    try {
+      // Send contact info to yourself
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_OWNER,
+        {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || 'Not provided',
+          message: formData.message
+        },
+        EMAILJS_USER_ID
+      );
+      
+      // Send auto-reply to the sender
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_USER,
+        {
+          to_email: formData.email,
+          name: formData.name,
+          message: formData.message
+        },
+        EMAILJS_USER_ID
+      );
+      
+      showToast('Message sent successfully!');
+      setFormData({ name: '', email: '', phone: '', message: '' });
+    } catch (error) {
+      console.error('Failed to send email:', error);
+      showToast('Failed to send message. Please try again.', 'error');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const TiltCard = ({ children, className }: { children: React.ReactNode, className?: string }) => {
@@ -113,9 +155,17 @@ const AwesomeContact = () => {
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: toast.show ? 1 : 0, y: toast.show ? 0 : 50 }}
-      className="fixed bottom-4 right-4 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl z-50 flex items-center space-x-2 border border-gray-700"
+      className={`fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-xl z-50 flex items-center space-x-2 border ${
+        toast.type === 'success' 
+          ? 'bg-gray-900 text-white border-green-500/30' 
+          : 'bg-red-900/80 text-white border-red-500/30'
+      }`}
     >
-      <Check className="w-5 h-5 text-green-500" />
+      {toast.type === 'success' ? (
+        <Check className="w-5 h-5 text-green-500" />
+      ) : (
+        <X className="w-5 h-5 text-red-500" />
+      )}
       <span>{toast.message}</span>
     </motion.div>
   );
@@ -169,6 +219,7 @@ const AwesomeContact = () => {
                       value={formData.name}
                       onChange={(e) => setFormData({...formData, name: e.target.value})}
                       className="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                      required
                     />
                   </div>
                   <div>
@@ -178,6 +229,7 @@ const AwesomeContact = () => {
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
                       className="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                      required
                     />
                   </div>
                 </div>
@@ -197,15 +249,33 @@ const AwesomeContact = () => {
                     onChange={(e) => setFormData({...formData, message: e.target.value})}
                     rows={4}
                     className="w-full px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                    required
                   ></textarea>
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full py-3 px-6 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium flex items-center justify-center gap-2 hover:shadow-lg transition-all"
+                  disabled={isSending}
+                  className={`w-full py-3 px-6 rounded-lg text-white font-medium flex items-center justify-center gap-2 hover:shadow-lg transition-all ${
+                    isSending 
+                      ? 'bg-gray-700 cursor-not-allowed' 
+                      : 'bg-gradient-to-r from-purple-600 to-blue-600'
+                  }`}
                 >
-                  <Send className="w-4 h-4" />
-                  Send Message
+                  {isSending ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      Send Message
+                    </>
+                  )}
                 </motion.button>
               </form>
             </div>
