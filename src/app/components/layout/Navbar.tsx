@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 const navigation = [
-  { name: 'Home', href: '#Hero' },
+  { name: 'Home', href: '#hero' },
   { name: 'About', href: '#about' },
   { name: 'Projects', href: '#projects' },
   { name: 'Spotlight', href: '#achievements' },
@@ -26,7 +26,7 @@ function Logo() {
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [activeLink, setActiveLink] = useState('#Hero')
+  const [activeLink, setActiveLink] = useState('#hero')
   const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
