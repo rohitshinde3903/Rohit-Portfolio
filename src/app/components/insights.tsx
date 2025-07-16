@@ -38,8 +38,25 @@ const ProjectCard = () => {
       liveUrl: "https://profoui.onrender.com/",
       image: "/images/profo.png" // Added image path
     }
-  ];
 
+
+  {
+  title: "The Ekta Project: NGO Website",
+  description: "A vibrant and responsive NGO platform built to raise awareness, enable donations, and showcase community programs with animated UI and accessibility-first design.",
+  tags: ["Next.js", "React", "Tailwind CSS", "Framer Motion", "Responsive Design", "UI/UX"],
+  highlights: [
+    "Beautifully animated hero section with floating elements, statistics, and CTAs",
+    "Fully responsive layout optimized for all screen sizes",
+    "Modern, accessible navbar with animated dropdown for mobile",
+    "Program and initiative sections with hover effects and clean cards",
+    "Newsletter form, social links, and contact section in the themed footer",
+    "Built with Next.js app directory, motion effects, and reusable components"
+  ],
+  githubUrl: "https://github.com/rohitshinde3903/the-ekta-project.git", // Replace with actual GitHub repo if different
+  liveUrl: "https://ektaproject.vercel.app/", // Replace with your deployed URL if different
+  image: "/images/ekta.png" // Add a proper screenshot to this path
+}
+  ];
   return (
     <section id="projects" className="py-20 bg-gradient-to-b from-black via-gray-900 to-black">
       <div className="max-w-7xl mx-auto px-4">
