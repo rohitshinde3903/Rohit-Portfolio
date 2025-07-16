@@ -35,7 +35,7 @@ const ProjectCard = () => {
         "Secured with login and authentication to keep data safe"
       ],
       githubUrl: "https://github.com/rohitshinde3903/PROFO.git",
-      liveUrl: "#",
+      liveUrl: "https://profoui.onrender.com/",
       image: "/images/profo.png" // Added image path
     }
   ];
