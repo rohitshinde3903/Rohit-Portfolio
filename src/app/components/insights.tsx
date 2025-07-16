@@ -37,7 +37,7 @@ const ProjectCard = () => {
       githubUrl: "https://github.com/rohitshinde3903/PROFO.git",
       liveUrl: "https://profoui.onrender.com/",
       image: "/images/profo.png" // Added image path
-    }
+    },
 
 
   {
@@ -53,7 +53,7 @@ const ProjectCard = () => {
     "Built with Next.js app directory, motion effects, and reusable components"
   ],
   githubUrl: "https://github.com/rohitshinde3903/the-ekta-project.git", // Replace with actual GitHub repo if different
-  liveUrl: "https://ektaproject.vercel.app/", // Replace with your deployed URL if different
+  liveUrl: "https://the-ekta-project.vercel.app/", // Replace with your deployed URL if different
   image: "/images/ekta.png" // Add a proper screenshot to this path
 }
   ];
