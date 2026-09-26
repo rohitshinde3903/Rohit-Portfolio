@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,74 +6,98 @@
 
 @layer base {
   :root {
-    --font-headline: 'Newsreader', serif;
+    --font-display: 'Syne', sans-serif;
     --font-sans: 'Inter', sans-serif;
     --font-mono: 'Fira Code', monospace;
-    --background: 24 33% 98%;
-    --foreground: 0 3% 11%;
   }
 
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: initial; /* Lenis handles smooth scrolling */
+    background-color: #070709;
+    color: #f8fafc;
   }
 
   body {
-    background-color: #fdf8f7;
-    color: #1c1b1b;
+    background-color: #070709;
+    color: #f8fafc;
     font-family: 'Inter', sans-serif;
     overflow-x: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-.font-headline {
-  font-family: 'Newsreader', serif;
+/* Subtle Film Grain Texture Overlay */
+.film-grain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Typography Helpers */
+.font-display {
+  font-family: 'Syne', sans-serif;
 }
 
 .font-mono {
   font-family: 'Fira Code', monospace;
 }
 
-/* Background Subtle Architectural Grid */
-.bg-grid-pattern {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(44, 42, 41, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(44, 42, 41, 0.04) 1px, transparent 1px);
+/* Text Masking & Cinematic Line Clamps */
+.line-mask {
+  overflow: hidden;
+  display: block;
 }
 
-/* Minimalist Warm Beige Glass Card */
-.glass-card {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(207, 196, 190, 0.45);
-  box-shadow: 0 10px 30px rgba(44, 42, 41, 0.03);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+/* Infinite Marquee */
+@keyframes marquee-infinite {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
-.glass-card:hover {
-  border-color: rgba(102, 93, 85, 0.35);
-  box-shadow: 0 20px 40px rgba(44, 42, 41, 0.06);
+.animate-marquee-smooth {
+  display: flex;
+  width: max-content;
+  animation: marquee-infinite 30s linear infinite;
+  will-change: transform;
 }
 
-/* Elegant Editorial Gradient Text */
-.gradient-text {
-  background: linear-gradient(135deg, #171615 0%, #665d55 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.animate-marquee-smooth:hover {
+  animation-play-state: paused;
 }
 
-/* Warm Stone Subtle Scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f7f3f2;
+  background: #070709;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cfc4be;
+  background: #272733;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #7e7570;
+  background: #8b5cf6;
+}
+
+/* Hide native cursor when custom cursor is active on pointer-fine devices */
+@media (pointer: fine) {
+  body.has-custom-cursor,
+  body.has-custom-cursor a,
+  body.has-custom-cursor button,
+  body.has-custom-cursor [role="button"] {
+    cursor: none !important;
+  }
 }

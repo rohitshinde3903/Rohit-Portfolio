@@ -1,131 +1,160 @@
 'use client';
 
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { ShieldCheck, Zap, Code2, Sparkles, MapPin } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+import { Sparkles, MapPin, CheckCircle2 } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function AboutMe() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const textColRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      // Parallax and scale on the profile image
+      gsap.fromTo(
+        imageContainerRef.current,
+        { scale: 0.9, y: 40 },
+        {
+          scale: 1.05,
+          y: -20,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+            end: 'bottom 20%',
+            scrub: 1.2,
+          },
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section 
-      id="about" 
-      className="py-24 max-w-7xl mx-auto px-6 border-t border-surface-variant/60"
+    <section
+      ref={sectionRef}
+      id="about"
+      className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         
-        {/* Left Column: Background, Profile Photo & Ethos (5 cols) */}
-        <motion.div 
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="lg:col-span-5 space-y-6"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-xs font-mono text-secondary">
-            <span>01 / BACKGROUND &amp; ETHOS</span>
+        {/* Left Column: Architectural Photo Dossier (5 cols) */}
+        <div className="lg:col-span-5 space-y-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-elevated text-xs font-mono text-secondary border border-border-subtle">
+            <span>02 / BACKGROUND &amp; ETHOS</span>
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight text-primary leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-primary leading-tight">
             Behind the architecture and the engineer.
           </h2>
 
-          {/* Profile Photo Display in Warm Stone Frame */}
-          <div className="flex items-center gap-5 p-4 rounded-2xl bg-surface-container-low border border-surface-variant">
-            <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden shrink-0 border border-outline-variant/60 shadow-sm bg-surface-container">
+          {/* Profile Photo Display with Cinematic Dark Frame */}
+          <div
+            ref={imageContainerRef}
+            data-cursor-label="ROHIT"
+            className="flex items-center gap-5 p-5 rounded-3xl bg-surface/80 border border-border-subtle backdrop-blur-xl shadow-2xl"
+          >
+            <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 border border-border-focus bg-surface-elevated shadow-inner">
               <Image
                 src="/images/rohit-profile.png"
                 alt="Rohit Shinde"
                 fill
-                sizes="112px"
+                sizes="128px"
                 priority
-                className="object-cover hover:scale-105 transition-transform duration-500"
+                className="object-cover transition-transform duration-700 hover:scale-110"
               />
             </div>
             <div>
-              <h3 className="font-bold text-lg text-primary font-headline">Rohit Shinde</h3>
-              <p className="text-xs text-secondary font-mono mb-2">
-                Pune, India &bull; Open for Remote / Hybrid
+              <h3 className="font-display font-bold text-xl text-primary">Rohit Shinde</h3>
+              <p className="text-xs text-secondary font-mono flex items-center gap-1 mt-0.5 mb-2">
+                <MapPin className="w-3.5 h-3.5 text-accent" />
+                Pune, India &bull; Open for Global Roles
               </p>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[11px] font-mono font-medium">
-                <Sparkles className="w-3 h-3 text-secondary" />
-                GenAI &amp; Full-Stack Specialist
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/15 border border-accent/30 text-accent text-xs font-mono font-medium">
+                <Sparkles className="w-3 h-3" />
+                GenAI &amp; Full-Stack Architect
               </span>
             </div>
           </div>
 
-          <p className="text-on-surface-variant text-base md:text-lg leading-relaxed">
+          <p className="text-secondary text-base leading-relaxed font-normal">
             I believe transformative AI is built at the intersection of rigorous mathematical precision and elegant systems design. My path started in core Python backend engineering before diving deep into deep learning, LLM fine-tuning, and retrieval architectures.
           </p>
 
-          <p className="text-on-surface-variant leading-relaxed text-sm md:text-base font-normal">
-            Whether fine-tuning open-source models with LoRA/QLoRA, deploying low-latency vLLM microservices, or building full-stack products for 15+ startups, my commitment is to deterministic accuracy and high performance.
+          <p className="text-secondary leading-relaxed text-sm font-normal">
+            When I am not tuning retrieval pipelines or fine-tuning models, you will find me designing resilient distributed services, optimizing quantization parameters, and mentoring upcoming developers.
           </p>
 
-          {/* Stat Badges */}
+          {/* Quantitative Badges */}
           <div className="pt-2 flex flex-wrap gap-4">
-            <div className="p-4 rounded-xl bg-surface-container-low border border-surface-variant flex-1 min-w-[140px]">
-              <div className="text-3xl font-bold font-headline text-primary">4+</div>
+            <div className="p-5 rounded-2xl bg-surface/70 border border-border-subtle flex-1 min-w-[140px]">
+              <div className="text-3xl font-display font-bold text-primary">4+</div>
               <div className="text-xs text-secondary font-mono mt-0.5">Years in AI &amp; Python</div>
             </div>
-            <div className="p-4 rounded-xl bg-surface-container-low border border-surface-variant flex-1 min-w-[140px]">
-              <div className="text-3xl font-bold font-headline text-primary">9.45</div>
+            <div className="p-5 rounded-2xl bg-surface/70 border border-border-subtle flex-1 min-w-[140px]">
+              <div className="text-3xl font-display font-bold text-accent">9.45</div>
               <div className="text-xs text-secondary font-mono mt-0.5">CGPA &bull; B.Tech AI &amp; DS</div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Right Column: Core Philosophy Card (7 cols) */}
-        <motion.div 
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="lg:col-span-7"
-        >
-          <div className="glass-card p-8 md:p-12 rounded-3xl relative overflow-hidden">
-            <div className="absolute -top-4 -right-4 w-32 h-32 bg-secondary-container rounded-full blur-2xl opacity-40 pointer-events-none" />
+        <div ref={textColRef} className="lg:col-span-7">
+          <div className="p-8 md:p-12 rounded-3xl bg-surface/80 border border-border-subtle backdrop-blur-2xl shadow-2xl relative overflow-hidden">
+            {/* Ambient Background Gradient Glow */}
+            <div className="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
 
-            <h3 className="text-2xl md:text-3xl font-bold font-headline text-primary mb-8">
+            <h3 className="text-2xl md:text-3xl font-display font-bold text-primary mb-8 relative z-10">
               Core Engineering Philosophy
             </h3>
 
-            <ul className="space-y-8">
+            <ul className="space-y-8 relative z-10">
               <li className="flex items-start gap-4">
-                <div className="w-9 h-9 rounded-xl bg-primary text-on-primary flex items-center justify-center shrink-0 font-mono text-sm mt-1 shadow-sm">
+                <div className="w-9 h-9 rounded-xl bg-accent text-primary flex items-center justify-center shrink-0 font-mono text-sm mt-1 shadow-md">
                   01
                 </div>
                 <div>
-                  <h4 className="font-bold text-primary text-base md:text-lg mb-1">
+                  <h4 className="font-display font-bold text-primary text-base md:text-lg mb-1">
                     Deterministic Guardrails over Blind Generation
                   </h4>
-                  <p className="text-sm text-on-surface-variant leading-relaxed">
+                  <p className="text-sm text-secondary leading-relaxed font-normal">
                     Every production LLM output must pass through rigorous verification layers and grounded vector retrieval to eliminate hallucinations and ensure factual compliance.
                   </p>
                 </div>
               </li>
 
               <li className="flex items-start gap-4">
-                <div className="w-9 h-9 rounded-xl bg-primary text-on-primary flex items-center justify-center shrink-0 font-mono text-sm mt-1 shadow-sm">
+                <div className="w-9 h-9 rounded-xl bg-accent text-primary flex items-center justify-center shrink-0 font-mono text-sm mt-1 shadow-md">
                   02
                 </div>
                 <div>
-                  <h4 className="font-bold text-primary text-base md:text-lg mb-1">
+                  <h4 className="font-display font-bold text-primary text-base md:text-lg mb-1">
                     Low Latency &amp; Memory Efficiency by Design
                   </h4>
-                  <p className="text-sm text-on-surface-variant leading-relaxed">
+                  <p className="text-sm text-secondary leading-relaxed font-normal">
                     Optimizing vector retrieval indices, model quantization (QLoRA, vLLM continuous batching), and async microservices to keep response times under sub-second thresholds.
                   </p>
                 </div>
               </li>
 
               <li className="flex items-start gap-4">
-                <div className="w-9 h-9 rounded-xl bg-primary text-on-primary flex items-center justify-center shrink-0 font-mono text-sm mt-1 shadow-sm">
+                <div className="w-9 h-9 rounded-xl bg-accent text-primary flex items-center justify-center shrink-0 font-mono text-sm mt-1 shadow-md">
                   03
                 </div>
                 <div>
-                  <h4 className="font-bold text-primary text-base md:text-lg mb-1">
+                  <h4 className="font-display font-bold text-primary text-base md:text-lg mb-1">
                     Developer Ergonomics &amp; Enterprise Scalability
                   </h4>
-                  <p className="text-sm text-on-surface-variant leading-relaxed">
+                  <p className="text-sm text-secondary leading-relaxed font-normal">
                     Building maintainable, well-tested Python and TypeScript codebases that scale effortlessly from early-stage MVP to enterprise-grade workloads.
                   </p>
                 </div>
@@ -133,17 +162,25 @@ export function AboutMe() {
             </ul>
 
             {/* Architectural Tags */}
-            <div className="mt-8 pt-6 border-t border-surface-variant flex flex-wrap gap-2">
+            <div className="mt-8 pt-6 border-t border-border-subtle flex flex-wrap gap-2 relative z-10">
               {[
-                "LLM Fine-Tuning", "RAG Pipelines", "FastAPI", "GCP Cloud Run", "Docker", "PyTorch"
+                'LLM Fine-Tuning',
+                'RAG Pipelines',
+                'FastAPI Microservices',
+                'GCP Cloud Run',
+                'Docker GPU Containers',
+                'PyTorch Transformers',
               ].map((tag, i) => (
-                <span key={i} className="px-3 py-1 rounded-lg bg-surface-container-low text-xs font-mono text-secondary border border-outline-variant/30">
+                <span
+                  key={i}
+                  className="px-3 py-1 rounded-lg bg-surface-elevated text-xs font-mono text-secondary border border-border-subtle"
+                >
                   {tag}
                 </span>
               ))}
             </div>
           </div>
-        </motion.div>
+        </div>
 
       </div>
     </section>

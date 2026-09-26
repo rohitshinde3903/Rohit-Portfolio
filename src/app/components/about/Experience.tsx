@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GraduationCap, Calendar, MapPin } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
 
 const experiences = [
   {
@@ -49,20 +49,29 @@ const experiences = [
 
 export default function ExperienceSection() {
   return (
-    <section 
-      id="experience" 
-      className="py-24 max-w-7xl mx-auto px-6 border-t border-surface-variant/60"
+    <section
+      id="experience"
+      className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10"
     >
-      <div className="mb-16">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-xs font-mono text-secondary mb-4">
-          <span>04 / PROFESSIONAL TRACK RECORD</span>
+      {/* Section Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6 border-b border-border-subtle pb-8">
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-elevated text-xs font-mono text-secondary mb-4 border border-border-subtle">
+            <span>05 / PROFESSIONAL TRACK RECORD</span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-display font-extrabold tracking-tight text-primary">
+            Experience &amp;{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-purple-300 to-cyan-400 italic font-normal">
+              Leadership
+            </span>
+          </h2>
         </div>
-        <h2 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight text-primary">
-          Experience &amp; Leadership
-        </h2>
+        <p className="text-secondary max-w-md text-sm sm:text-base leading-relaxed font-normal">
+          Proven history leading GenAI fine-tuning, vector retrieval architecture, and founding production software systems.
+        </p>
       </div>
 
-      <div className="space-y-8 max-w-4xl">
+      <div className="space-y-8 max-w-4xl mx-auto">
         {experiences.map((exp, idx) => (
           <motion.div
             key={idx}
@@ -70,23 +79,23 @@ export default function ExperienceSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: idx * 0.1 }}
-            className="glass-card p-8 rounded-3xl relative"
+            className="p-8 md:p-10 rounded-3xl bg-surface/80 border border-border-subtle hover:border-accent/40 backdrop-blur-xl transition-all duration-300 relative group"
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
               <div>
-                <h3 className="text-xl md:text-2xl font-bold text-primary font-headline">
+                <h3 className="text-xl md:text-2xl font-display font-bold text-primary group-hover:text-accent transition-colors">
                   {exp.role}
                 </h3>
                 <div className="text-secondary font-mono text-sm mt-0.5">
                   {exp.company} &bull; {exp.location}
                 </div>
               </div>
-              <span className="px-3.5 py-1 rounded-full bg-surface-container-high text-xs font-mono text-secondary w-fit border border-outline-variant/30">
+              <span className="px-3.5 py-1 rounded-full bg-surface-elevated text-xs font-mono text-secondary w-fit border border-border-subtle">
                 {exp.period}
               </span>
             </div>
 
-            <p className="text-on-surface-variant mb-6 leading-relaxed text-sm md:text-base font-normal">
+            <p className="text-secondary mb-6 leading-relaxed text-sm md:text-base font-normal">
               {exp.description}
             </p>
 
@@ -94,7 +103,7 @@ export default function ExperienceSection() {
               {exp.tags.map((tag, tIdx) => (
                 <span
                   key={tIdx}
-                  className="px-2.5 py-1 rounded-md bg-surface-container-low text-xs font-mono text-secondary border border-outline-variant/30"
+                  className="px-2.5 py-1 rounded-md bg-surface-elevated text-xs font-mono text-secondary border border-border-subtle"
                 >
                   {tag}
                 </span>
@@ -103,35 +112,35 @@ export default function ExperienceSection() {
           </motion.div>
         ))}
 
-        {/* Academic Degree Distinction Card */}
+        {/* Academic Distinction Card */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="glass-card p-8 rounded-3xl relative border border-secondary/20 flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+          className="p-8 md:p-10 rounded-3xl bg-gradient-to-r from-surface-elevated via-surface to-surface-elevated border-2 border-accent/30 backdrop-blur-2xl shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6"
         >
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-primary text-on-primary flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-accent text-primary flex items-center justify-center shrink-0 shadow-lg shadow-accent/20">
               <GraduationCap className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs font-mono text-secondary tracking-widest uppercase">
+              <span className="text-xs font-mono text-accent tracking-widest uppercase font-semibold">
                 Academic Distinction &bull; 2021 — 2025
               </span>
-              <h3 className="text-xl md:text-2xl font-bold text-primary font-headline mt-1">
+              <h3 className="text-xl md:text-2xl font-display font-bold text-primary mt-1">
                 B.Tech in Artificial Intelligence &amp; Data Science
               </h3>
-              <p className="text-sm text-on-surface-variant mt-0.5">
+              <p className="text-sm text-secondary mt-0.5 font-normal">
                 Dr. D. Y. Patil Vidyapeeth, Pune, India
               </p>
             </div>
           </div>
 
           <div className="sm:text-right shrink-0">
-            <div className="inline-block px-4 py-2 rounded-xl bg-surface-container-high border border-outline-variant/40">
-              <div className="text-xs font-mono text-secondary">Cumulative CGPA</div>
-              <div className="text-2xl font-bold font-headline text-primary">
+            <div className="inline-block px-5 py-2.5 rounded-2xl bg-surface-elevated border border-border-subtle">
+              <div className="text-xs font-mono text-muted">Cumulative CGPA</div>
+              <div className="text-2xl font-display font-bold text-accent">
                 9.45 <span className="text-xs text-secondary font-mono">/ 10.0</span>
               </div>
             </div>
