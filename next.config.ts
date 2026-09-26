@@ -1,8 +1,15 @@
+import type { NextConfig } from 'next';
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   images: {
-    domains: [], // Add any external image domains here if needed
+    unoptimized: true, // Guarantees local images load immediately without server-side optimization glitches
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
-}
+};
 
+export default nextConfig;

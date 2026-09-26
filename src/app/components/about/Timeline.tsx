@@ -1,155 +1,151 @@
+'use client';
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { Award, Sparkles, ExternalLink, Calendar, Trophy } from 'lucide-react';
 
-const achievements = [
-  { image: '/images/9.jpg' },
-  { image: '/images/10.jpg' },
-  { image: '/images/6.jpg' },
-  { image: '/images/3.jpg' },
-  { image: '/images/1.jpg' },
-  { image: '/images/2.jpg' },
-  { image: '/images/3.jpg' },
-  { image: '/images/4.png' },
-  { image: '/images/5.png' },
-  { image: '/images/7.jpg' },
-  { image: '/images/8.jpg' },
-  { image: '/images/icon.ico' },
+const milestones = [
+  {
+    image: '/images/1.jpg',
+    title: 'Hackathon Champion',
+    category: 'Competition',
+    date: '2024',
+    description: 'First prize for architecting AI-powered computer vision and security automation.'
+  },
+  {
+    image: '/images/2.jpg',
+    title: 'Technical Presentation',
+    category: 'Keynote',
+    date: '2024',
+    description: 'Demonstrating generative AI and SLM fine-tuning techniques to student engineers.'
+  },
+  {
+    image: '/images/3.jpg',
+    title: 'Project Innovation Award',
+    category: 'Academic Honor',
+    date: '2024',
+    description: 'Recognized for pioneering work in AI-powered Electronic Voting verification.'
+  },
+  {
+    image: '/images/4.png',
+    title: 'PROFO Platform Launch',
+    category: 'Product Release',
+    date: '2024',
+    description: 'Public release of full-stack developer portfolio and profile management engine.'
+  },
+  {
+    image: '/images/6.jpg',
+    title: 'Tech Fest Exhibition',
+    category: 'Symposium',
+    date: '2023',
+    description: 'Showcasing real-time machine learning inference prototypes to industry mentors.'
+  },
+  {
+    image: '/images/7.jpg',
+    title: 'Research Team Spotlight',
+    category: 'R&D',
+    date: '2024',
+    description: 'Collaborative development on synthetic data generation and biometric verification.'
+  },
+  {
+    image: '/images/8.jpg',
+    title: 'Workshop Mentorship',
+    category: 'Community',
+    date: '2024',
+    description: 'Mentoring 50+ prospective developers in Python, Django, and modern cloud deployment.'
+  },
+  {
+    image: '/images/9.jpg',
+    title: 'Leadership Recognition',
+    category: 'Leadership',
+    date: '2023',
+    description: 'Honored for spearheading engineering workshops and hackathon initiatives.'
+  },
+  {
+    image: '/images/10.jpg',
+    title: 'National Tech Summit',
+    category: 'Conference',
+    date: '2024',
+    description: 'Representing university engineering in competitive software development arenas.'
+  },
 ];
 
 const AchievementGrid = () => {
   return (
-    <section id="achievements" className="relative py-20 bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-10">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-purple-500 blur-3xl animate-float-slow" />
-        <div className="absolute bottom-1/3 right-1/4 w-48 h-48 rounded-full bg-blue-500 blur-3xl animate-float-medium" />
-      </div>
+    <section id="achievements" className="relative py-24 overflow-hidden">
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/2 left-1/4 w-80 h-80 rounded-full bg-purple-600/10 blur-[130px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-cyan-600/10 blur-[130px] pointer-events-none" />
       
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+        
         {/* Section Header */}
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <motion.div 
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-800 mb-4"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className="h-2 w-2 rounded-full bg-purple-500 animate-pulse" />
-            <span className="text-sm font-medium text-purple-400">Achievements</span>
-          </motion.div>
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/40 border border-purple-500/30 mb-4">
+            <Trophy className="h-3.5 w-3.5 text-purple-400" />
+            <span className="text-xs sm:text-sm font-mono text-purple-300">Milestones & Recognition</span>
+          </div>
           
-          <motion.h2 
-            className="text-3xl sm:text-4xl font-bold text-white mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            My <span className="text-purple-500">Milestones</span> & Recognition
-          </motion.h2>
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-white mb-4">
+            Spotlight & <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-indigo-300 to-cyan-400">Accomplishments</span>
+          </h2>
           
-          <motion.div 
-            className="flex justify-center mb-6"
-            initial={{ opacity: 0, scaleX: 0 }}
-            whileInView={{ opacity: 1, scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <div className="w-32 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full" />
-          </motion.div>
-          
-          <motion.p 
-            className="text-gray-400 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-          >
-            Highlights from hackathons, competitions, and professional accomplishments
-          </motion.p>
-        </motion.div>
+          <p className="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base font-light">
+            Moments from hackathons, technical conferences, academic research, and engineering awards.
+          </p>
+        </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4">
-          {achievements.map((achievement, idx) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {milestones.map((item, idx) => (
             <motion.div
               key={idx}
-              className="group relative overflow-hidden rounded-xl border border-gray-800 hover:border-purple-500/50 transition-all duration-500"
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: idx * 0.1 }}
-              whileHover={{ 
-                y: -10,
-                boxShadow: "0 20px 25px -5px rgba(126, 34, 206, 0.3), 0 10px 10px -5px rgba(126, 34, 206, 0.1)"
-              }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              whileHover={{ y: -6 }}
+              className="group relative rounded-2xl overflow-hidden border border-white/10 bg-black/60 hover:border-purple-500/50 shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_0_30px_rgba(147,51,234,0.25)] transition-all duration-500"
             >
-              {/* Image */}
-              <div className="relative aspect-square overflow-hidden">
+              {/* Image Frame with Aspect Ratio */}
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-950">
                 <Image
-                  src={achievement.image}
-                  alt={`Achievement ${idx + 1}`}
+                  src={item.image}
+                  alt={item.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover group-hover:scale-108 transition-transform duration-700 filter brightness-95 group-hover:brightness-105"
                 />
                 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
                 
-                {/* Content on hover */}
-                <div className="absolute inset-0 flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <motion.h3 
-                    className="text-white font-bold text-lg mb-2"
-                    initial={{ y: 20 }}
-                    whileInView={{ y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.2 }}
-                  >
-                    PROFO Launch
-                  </motion.h3>
-                  <motion.p 
-                    className="text-gray-300 text-sm"
-                    initial={{ y: 20 }}
-                    whileInView={{ y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.3 }}
-                  >
-                  </motion.p>
-                  
-                  <motion.div 
-                    className="mt-4 flex gap-2"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ duration: 0.4, delay: 0.4 }}
-                  >
-                    <span className="px-3 py-1 text-xs bg-purple-900/50 text-purple-300 rounded-full">
-                      February
-                    </span>
-                    <span className="px-3 py-1 text-xs bg-blue-900/50 text-blue-300 rounded-full">
-                      2025
-                    </span>
-                  </motion.div>
+                {/* Top Badge */}
+                <div className="absolute top-3 left-3 flex items-center gap-2">
+                  <span className="px-2.5 py-1 text-[11px] font-mono rounded-full bg-black/70 border border-purple-500/40 text-purple-300 backdrop-blur-md">
+                    {item.category}
+                  </span>
+                  <span className="px-2.5 py-1 text-[11px] font-mono rounded-full bg-black/70 border border-white/20 text-gray-300 backdrop-blur-md flex items-center gap-1">
+                    <Calendar className="w-3 h-3 text-cyan-400" />
+                    {item.date}
+                  </span>
                 </div>
+              </div>
+
+              {/* Card Footer Content */}
+              <div className="p-5 relative z-10 bg-gradient-to-b from-transparent to-black">
+                <h3 className="text-lg font-bold text-white mb-1.5 group-hover:text-purple-300 transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-xs text-gray-400 font-light leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* View More Button */}
-        <motion.div 
-          className="flex justify-center mt-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          <button className="px-8 py-3 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl flex items-center gap-2">
-            View All Achievements
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </button>
-        </motion.div>
       </div>
     </section>
   );
