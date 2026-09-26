@@ -1,9 +1,12 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { Calendar } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const milestones = [
   {
@@ -72,11 +75,86 @@ const milestones = [
 ];
 
 export default function AchievementGrid() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const watermarkRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      // Tri-column differential parallax
+      cardsRef.current.forEach((card, idx) => {
+        if (!card) return;
+
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 35 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 88%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
+
+        // Column differential scrub (col 1 accelerates upward, col 2 gently drags)
+        const col = idx % 3;
+        const yDelta = col === 1 ? -45 : col === 2 ? 35 : 0;
+
+        if (yDelta !== 0) {
+          gsap.to(card, {
+            y: yDelta,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1.2,
+            },
+          });
+        }
+      });
+
+      // Background watermark parallax
+      if (watermarkRef.current) {
+        gsap.to(watermarkRef.current, {
+          x: -90,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.4,
+          },
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="achievements"
-      className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10"
+      className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10 overflow-hidden"
     >
+      {/* Background Parallax Watermark */}
+      <div
+        ref={watermarkRef}
+        className="absolute -right-20 top-1/2 -translate-y-1/2 font-display text-[13rem] md:text-[17rem] font-black text-white/[0.02] pointer-events-none select-none tracking-tighter leading-none -z-10"
+        aria-hidden="true"
+      >
+        MILESTONES
+      </div>
+
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6 border-b border-border-subtle pb-8">
         <div>
@@ -97,12 +175,11 @@ export default function AchievementGrid() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {milestones.map((item, idx) => (
-          <motion.div
+          <div
             key={idx}
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: idx * 0.08 }}
+            ref={(el) => {
+              cardsRef.current[idx] = el;
+            }}
             data-cursor-label="EXPAND"
             className="p-4 rounded-3xl bg-surface/80 border border-border-subtle hover:border-accent/40 backdrop-blur-xl group transition-all duration-300"
           >
@@ -134,7 +211,7 @@ export default function AchievementGrid() {
                 {item.description}
               </p>
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>

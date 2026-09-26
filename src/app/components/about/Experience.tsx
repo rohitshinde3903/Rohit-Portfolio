@@ -1,8 +1,11 @@
 'use client';
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { GraduationCap } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const experiences = [
   {
@@ -48,11 +51,87 @@ const experiences = [
 ];
 
 export default function ExperienceSection() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const watermarkRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      // 1. Illuminated Timeline Beam Progress
+      if (lineRef.current) {
+        gsap.fromTo(
+          lineRef.current,
+          { scaleY: 0 },
+          {
+            scaleY: 1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 70%',
+              end: 'bottom 80%',
+              scrub: 1,
+            },
+          }
+        );
+      }
+
+      // 2. Experience Cards Staggered Reveals
+      cardsRef.current.forEach((card) => {
+        if (!card) return;
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 35 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
+      });
+
+      // 3. Background Watermark Parallax Drift
+      if (watermarkRef.current) {
+        gsap.to(watermarkRef.current, {
+          x: 80,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.4,
+          },
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="experience"
-      className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10"
+      className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10 overflow-hidden"
     >
+      {/* Background Parallax Watermark */}
+      <div
+        ref={watermarkRef}
+        className="absolute -left-20 top-1/2 -translate-y-1/2 font-display text-[13rem] md:text-[17rem] font-black text-white/[0.02] pointer-events-none select-none tracking-tighter leading-none -z-10"
+        aria-hidden="true"
+      >
+        TRACK
+      </div>
+
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6 border-b border-border-subtle pb-8">
         <div>
@@ -71,81 +150,89 @@ export default function ExperienceSection() {
         </p>
       </div>
 
-      <div className="space-y-8 max-w-4xl mx-auto">
-        {experiences.map((exp, idx) => (
-          <motion.div
-            key={idx}
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: idx * 0.1 }}
-            className="p-8 md:p-10 rounded-3xl bg-surface/80 border border-border-subtle hover:border-accent/40 backdrop-blur-xl transition-all duration-300 relative group"
+      <div className="relative max-w-4xl mx-auto">
+        {/* Illuminated Vertical Timeline Line on Desktop */}
+        <div className="hidden md:block absolute left-0 top-4 bottom-4 w-[2px] bg-surface-elevated overflow-hidden">
+          <div
+            ref={lineRef}
+            className="w-full h-full bg-gradient-to-b from-accent via-purple-400 to-cyan-400 origin-top shadow-sm shadow-accent/50"
+          />
+        </div>
+
+        <div className="space-y-8 md:pl-8">
+          {experiences.map((exp, idx) => (
+            <div
+              key={idx}
+              ref={(el) => {
+                cardsRef.current[idx] = el;
+              }}
+              className="p-8 md:p-10 rounded-3xl bg-surface/80 border border-border-subtle hover:border-accent/40 backdrop-blur-xl transition-all duration-300 relative group"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                <div>
+                  <h3 className="text-xl md:text-2xl font-display font-bold text-primary group-hover:text-accent transition-colors">
+                    {exp.role}
+                  </h3>
+                  <div className="text-secondary font-mono text-sm mt-0.5">
+                    {exp.company} &bull; {exp.location}
+                  </div>
+                </div>
+                <span className="px-3.5 py-1 rounded-full bg-surface-elevated text-xs font-mono text-secondary w-fit border border-border-subtle">
+                  {exp.period}
+                </span>
+              </div>
+
+              <p className="text-secondary mb-6 leading-relaxed text-sm md:text-base font-normal">
+                {exp.description}
+              </p>
+
+              <div className="flex flex-wrap gap-2">
+                {exp.tags.map((tag, tIdx) => (
+                  <span
+                    key={tIdx}
+                    className="px-2.5 py-1 rounded-md bg-surface-elevated text-xs font-mono text-secondary border border-border-subtle"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {/* Academic Distinction Card */}
+          <div
+            ref={(el) => {
+              cardsRef.current[experiences.length] = el;
+            }}
+            className="p-8 md:p-10 rounded-3xl bg-gradient-to-r from-surface-elevated via-surface to-surface-elevated border-2 border-accent/30 backdrop-blur-2xl shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6"
           >
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-accent text-primary flex items-center justify-center shrink-0 shadow-lg shadow-accent/20">
+                <GraduationCap className="w-6 h-6" />
+              </div>
               <div>
-                <h3 className="text-xl md:text-2xl font-display font-bold text-primary group-hover:text-accent transition-colors">
-                  {exp.role}
+                <span className="text-xs font-mono text-accent tracking-widest uppercase font-semibold">
+                  Academic Distinction &bull; 2021 — 2025
+                </span>
+                <h3 className="text-xl md:text-2xl font-display font-bold text-primary mt-1">
+                  B.Tech in Artificial Intelligence &amp; Data Science
                 </h3>
-                <div className="text-secondary font-mono text-sm mt-0.5">
-                  {exp.company} &bull; {exp.location}
+                <p className="text-sm text-secondary mt-0.5 font-normal">
+                  Dr. D. Y. Patil Vidyapeeth, Pune, India
+                </p>
+              </div>
+            </div>
+
+            <div className="sm:text-right shrink-0">
+              <div className="inline-block px-5 py-2.5 rounded-2xl bg-surface-elevated border border-border-subtle">
+                <div className="text-xs font-mono text-muted">Cumulative CGPA</div>
+                <div className="text-2xl font-display font-bold text-accent">
+                  9.45 <span className="text-xs text-secondary font-mono">/ 10.0</span>
                 </div>
               </div>
-              <span className="px-3.5 py-1 rounded-full bg-surface-elevated text-xs font-mono text-secondary w-fit border border-border-subtle">
-                {exp.period}
-              </span>
-            </div>
-
-            <p className="text-secondary mb-6 leading-relaxed text-sm md:text-base font-normal">
-              {exp.description}
-            </p>
-
-            <div className="flex flex-wrap gap-2">
-              {exp.tags.map((tag, tIdx) => (
-                <span
-                  key={tIdx}
-                  className="px-2.5 py-1 rounded-md bg-surface-elevated text-xs font-mono text-secondary border border-border-subtle"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        ))}
-
-        {/* Academic Distinction Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="p-8 md:p-10 rounded-3xl bg-gradient-to-r from-surface-elevated via-surface to-surface-elevated border-2 border-accent/30 backdrop-blur-2xl shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-6"
-        >
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-accent text-primary flex items-center justify-center shrink-0 shadow-lg shadow-accent/20">
-              <GraduationCap className="w-6 h-6" />
-            </div>
-            <div>
-              <span className="text-xs font-mono text-accent tracking-widest uppercase font-semibold">
-                Academic Distinction &bull; 2021 — 2025
-              </span>
-              <h3 className="text-xl md:text-2xl font-display font-bold text-primary mt-1">
-                B.Tech in Artificial Intelligence &amp; Data Science
-              </h3>
-              <p className="text-sm text-secondary mt-0.5 font-normal">
-                Dr. D. Y. Patil Vidyapeeth, Pune, India
-              </p>
             </div>
           </div>
-
-          <div className="sm:text-right shrink-0">
-            <div className="inline-block px-5 py-2.5 rounded-2xl bg-surface-elevated border border-border-subtle">
-              <div className="text-xs font-mono text-muted">Cumulative CGPA</div>
-              <div className="text-2xl font-display font-bold text-accent">
-                9.45 <span className="text-xs text-secondary font-mono">/ 10.0</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

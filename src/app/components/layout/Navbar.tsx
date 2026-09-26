@@ -21,9 +21,14 @@ export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('#home');
   const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgress((window.scrollY / totalScroll) * 100);
+      }
       setScrolled(window.scrollY > 40);
 
       navigation.forEach((item) => {
@@ -42,7 +47,16 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-6 pt-5 transition-all duration-300">
+    <>
+      {/* Editorial Scroll Progress Hairline */}
+      <div className="fixed top-0 left-0 right-0 h-[2.5px] z-[60] bg-transparent pointer-events-none">
+        <div
+          className="h-full bg-gradient-to-r from-accent via-purple-400 to-cyan-400 transition-all duration-75 ease-out shadow-sm shadow-accent/50"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
+
+      <header className="fixed top-0 left-0 right-0 z-50 px-6 pt-5 transition-all duration-300">
       <div
         className={cn(
           'max-w-7xl mx-auto px-6 h-16 rounded-2xl flex items-center justify-between transition-all duration-500',
@@ -165,5 +179,6 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </header>
+    </>
   );
 }

@@ -2,9 +2,12 @@
 
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { ArrowDown, ArrowRight, Zap, Cpu, FileDown } from 'lucide-react';
 import HeroSceneCanvas from '../3d/HeroSceneCanvas';
 import MagneticButton from '../ui/MagneticButton';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const telemetryStats = [
   { value: '+38%', label: 'Q&A Accuracy', detail: 'Gemma 3B LoRA' },
@@ -22,6 +25,8 @@ export default function Hero() {
   const ctaRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const scrollCueRef = useRef<HTMLDivElement>(null);
+  const floatLeftRef = useRef<HTMLDivElement>(null);
+  const floatRightRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -71,6 +76,84 @@ export default function Hero() {
           { opacity: 0.6, duration: 0.5 },
           '-=0.2'
         );
+
+      // Multi-plane Scrubbed Parallax on Scroll
+      gsap.to([badgeRef.current, titleLine1Ref.current, titleLine2Ref.current], {
+        y: 80,
+        opacity: 0.2,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.8,
+        },
+      });
+
+      gsap.to(descRef.current, {
+        y: 110,
+        opacity: 0.1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+
+      gsap.to(ctaRef.current, {
+        y: 140,
+        opacity: 0.05,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.1,
+        },
+      });
+
+      gsap.to(statsRef.current, {
+        y: 170,
+        opacity: 0.05,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.2,
+        },
+      });
+
+      // Floating editorial badges with differential scroll drift
+      if (floatLeftRef.current) {
+        gsap.to(floatLeftRef.current, {
+          y: -100,
+          opacity: 0.1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.5,
+          },
+        });
+      }
+
+      if (floatRightRef.current) {
+        gsap.to(floatRightRef.current, {
+          y: -60,
+          opacity: 0.1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.3,
+          },
+        });
+      }
     }, containerRef);
 
     return () => ctx.revert();
@@ -84,6 +167,25 @@ export default function Hero() {
     >
       {/* Three.js WebGL Interactive Ambient Background */}
       <HeroSceneCanvas />
+
+      {/* Floating Architectural Coordinate Overlays (Parallax-driven) */}
+      <div
+        ref={floatLeftRef}
+        className="hidden xl:flex absolute left-8 top-1/2 -translate-y-1/2 z-10 flex-col gap-2 font-mono text-[10px] text-muted tracking-widest pointer-events-none select-none border-l border-border-subtle pl-4 py-3"
+      >
+        <span className="text-accent/80 font-bold">LOC // 18.5204° N</span>
+        <span>GEO // 73.8567° E</span>
+        <span className="text-secondary/60">SYS // STABLE</span>
+      </div>
+
+      <div
+        ref={floatRightRef}
+        className="hidden xl:flex absolute right-8 top-1/2 -translate-y-1/2 z-10 flex-col items-end gap-2 font-mono text-[10px] text-muted tracking-widest pointer-events-none select-none border-r border-border-subtle pr-4 py-3"
+      >
+        <span className="text-accent/80 font-bold">MODE // PRODUCTION</span>
+        <span>RAG // DETERMINISTIC</span>
+        <span className="text-secondary/60">REV // 2026.04</span>
+      </div>
 
       {/* Main Narrative Stack */}
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center text-center my-auto">

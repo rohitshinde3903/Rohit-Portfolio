@@ -12,15 +12,17 @@ export default function VibeVsEngineering() {
   const leftCardRef = useRef<HTMLDivElement>(null);
   const rightCardRef = useRef<HTMLDivElement>(null);
 
+  const bgGlowRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // Scrubbed scroll reveal
+      // 1. Initial entry reveal
       gsap.fromTo(
         leftCardRef.current,
-        { opacity: 0, x: -50, scale: 0.95 },
+        { opacity: 0, x: -40, scale: 0.96 },
         {
           opacity: 1,
           x: 0,
@@ -29,8 +31,8 @@ export default function VibeVsEngineering() {
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 75%',
-            end: 'top 30%',
+            start: 'top 80%',
+            end: 'top 35%',
             scrub: 1,
           },
         }
@@ -38,7 +40,7 @@ export default function VibeVsEngineering() {
 
       gsap.fromTo(
         rightCardRef.current,
-        { opacity: 0, x: 50, scale: 0.95 },
+        { opacity: 0, x: 40, scale: 0.96 },
         {
           opacity: 1,
           x: 0,
@@ -47,12 +49,50 @@ export default function VibeVsEngineering() {
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 75%',
-            end: 'top 30%',
+            start: 'top 80%',
+            end: 'top 35%',
             scrub: 1,
           },
         }
       );
+
+      // 2. Continuous differential scroll parallax through the section
+      // Left card (fragile toy) sinks slightly, right card (hardened engineering) elevates!
+      gsap.to(leftCardRef.current, {
+        y: 45,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.2,
+        },
+      });
+
+      gsap.to(rightCardRef.current, {
+        y: -45,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.2,
+        },
+      });
+
+      // 3. Background subtle ambient glow parallax drift
+      if (bgGlowRef.current) {
+        gsap.to(bgGlowRef.current, {
+          y: -120,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.5,
+          },
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -62,8 +102,14 @@ export default function VibeVsEngineering() {
     <section
       ref={sectionRef}
       id="vibe-vs-engineering"
-      className="py-28 max-w-7xl mx-auto px-6 relative z-10"
+      className="py-28 max-w-7xl mx-auto px-6 relative z-10 overflow-hidden"
     >
+      {/* Ambient Parallax Radial Glow */}
+      <div
+        ref={bgGlowRef}
+        className="absolute top-1/3 -right-24 w-96 h-96 rounded-full bg-accent/5 blur-3xl pointer-events-none -z-10"
+        aria-hidden="true"
+      />
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6 border-b border-border-subtle pb-8">
         <div>

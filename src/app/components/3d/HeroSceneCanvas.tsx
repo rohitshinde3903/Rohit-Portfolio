@@ -101,6 +101,14 @@ export default function HeroSceneCanvas() {
     );
     observer.observe(container);
 
+    // Scroll Parallax Tracking
+    let scrollY = 0;
+    let targetScrollY = 0;
+    const onScroll = () => {
+      targetScrollY = window.scrollY;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
     // Animation Loop
     let animId: number;
     let clock = new THREE.Clock();
@@ -111,14 +119,22 @@ export default function HeroSceneCanvas() {
       if (!isVisible) return;
 
       const elapsedTime = clock.getElapsedTime();
-      particles.rotation.y = elapsedTime * 0.03;
+      
+      // Smooth scroll parallax damping
+      scrollY += (targetScrollY - scrollY) * 0.08;
+
+      particles.rotation.y = elapsedTime * 0.03 + scrollY * 0.0003;
       particles.rotation.x = elapsedTime * 0.015;
+      particles.rotation.z = scrollY * 0.0004;
+      particles.position.y = scrollY * 0.008;
 
       // Subtle mouse damping
       mouseX += (targetMouseX - mouseX) * 0.05;
       mouseY += (targetMouseY - mouseY) * 0.05;
       camera.position.x = mouseX * 2.5;
       camera.position.y = -mouseY * 2.5;
+      // 3D camera flight parallax into depth
+      camera.position.z = 25 - Math.min(scrollY * 0.015, 12);
       camera.lookAt(scene.position);
 
       renderer.render(scene, camera);
@@ -129,6 +145,7 @@ export default function HeroSceneCanvas() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
       observer.disconnect();
       geometry.dispose();

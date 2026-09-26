@@ -1,8 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { ShieldCheck, Cpu } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 type Skill = {
   name: string;
@@ -66,12 +70,46 @@ const certifications = [
 
 export default function SkillsSection() {
   const [activeCategory, setActiveCategory] = useState<Category>('GenAI & LLMs');
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const watermarkRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      if (watermarkRef.current) {
+        gsap.to(watermarkRef.current, {
+          x: -80,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.5,
+          },
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       id="skills"
-      className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10"
+      className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10 overflow-hidden"
     >
+      {/* Background Parallax Watermark */}
+      <div
+        ref={watermarkRef}
+        className="absolute -right-20 top-1/2 -translate-y-1/2 font-display text-[13rem] md:text-[17rem] font-black text-white/[0.02] pointer-events-none select-none tracking-tighter leading-none -z-10"
+        aria-hidden="true"
+      >
+        ARSENAL
+      </div>
+
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6 border-b border-border-subtle pb-8">
         <div>

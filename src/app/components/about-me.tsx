@@ -13,27 +13,61 @@ export function AboutMe() {
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const textColRef = useRef<HTMLDivElement>(null);
 
+  const watermarkRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
-      // Parallax and scale on the profile image
+      // 1. Profile image container parallax float
       gsap.fromTo(
         imageContainerRef.current,
-        { scale: 0.9, y: 40 },
+        { y: 50, scale: 0.98 },
         {
-          scale: 1.05,
-          y: -20,
-          ease: 'power2.out',
+          y: -40,
+          scale: 1.02,
+          ease: 'none',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
-            end: 'bottom 20%',
+            start: 'top bottom',
+            end: 'bottom top',
             scrub: 1.2,
           },
         }
       );
+
+      // 2. Philosophy card subtle counter-parallax float
+      if (textColRef.current) {
+        gsap.fromTo(
+          textColRef.current,
+          { y: 35 },
+          {
+            y: -35,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1,
+            },
+          }
+        );
+      }
+
+      // 3. Subtle background watermark horizontal parallax drift
+      if (watermarkRef.current) {
+        gsap.to(watermarkRef.current, {
+          x: -80,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.5,
+          },
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -43,8 +77,17 @@ export function AboutMe() {
     <section
       ref={sectionRef}
       id="about"
-      className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10"
+      className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10 overflow-hidden"
     >
+      {/* Background Architectural Monogram Parallax Watermark */}
+      <div
+        ref={watermarkRef}
+        className="absolute -right-20 top-1/2 -translate-y-1/2 font-display text-[14rem] md:text-[18rem] font-black text-white/[0.02] pointer-events-none select-none tracking-tighter leading-none -z-10"
+        aria-hidden="true"
+      >
+        ROHIT
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         
         {/* Left Column: Architectural Photo Dossier (5 cols) */}

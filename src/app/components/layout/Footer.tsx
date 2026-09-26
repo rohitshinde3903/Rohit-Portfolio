@@ -1,11 +1,39 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Mail, Linkedin, Github, Phone, Check } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+import { Mail, Linkedin, Phone, Check } from 'lucide-react';
 import MagneticButton from '../ui/MagneticButton';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function AwesomeContact() {
   const [copied, setCopied] = useState<string | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const watermarkRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      if (watermarkRef.current) {
+        gsap.to(watermarkRef.current, {
+          x: 90,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 1.5,
+          },
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const handleCopy = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
@@ -17,9 +45,18 @@ export default function AwesomeContact() {
     <>
       {/* Contact Section */}
       <section
+        ref={sectionRef}
         id="contact"
-        className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10"
+        className="py-28 max-w-7xl mx-auto px-6 border-t border-border-subtle relative z-10 overflow-hidden"
       >
+        {/* Background Parallax Watermark */}
+        <div
+          ref={watermarkRef}
+          className="absolute -left-20 top-1/2 -translate-y-1/2 font-display text-[13rem] md:text-[17rem] font-black text-white/[0.02] pointer-events-none select-none tracking-tighter leading-none -z-10"
+          aria-hidden="true"
+        >
+          CONNECT
+        </div>
         <div className="p-12 md:p-16 rounded-3xl bg-surface/80 border border-border-subtle backdrop-blur-2xl text-center relative overflow-hidden shadow-2xl">
           {/* Subtle Ambient Glow */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
