@@ -5,57 +5,46 @@ import gsap from 'gsap';
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
   const [label, setLabel] = useState<string>('');
   const [isHovering, setIsHovering] = useState<boolean>(false);
-  const [isClicking, setIsClicking] = useState<boolean>(false);
-  const [isEnabled, setIsEnabled] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
     // Only enable on devices with fine pointer (mouse/trackpad), not touch
     const isFinePointer = window.matchMedia('(pointer: fine)').matches;
     if (!isFinePointer) return;
 
-    setIsEnabled(true);
-    document.body.classList.add('has-custom-cursor');
-
     const cursor = cursorRef.current;
-    const dot = dotRef.current;
-    if (!cursor || !dot) return;
+    if (!cursor) return;
 
-    // Use fast lerping with quickSetter for high performance
-    const setCursorX = gsap.quickSetter(cursor, 'x', 'px');
-    const setCursorY = gsap.quickSetter(cursor, 'y', 'px');
-    const setDotX = gsap.quickSetter(dot, 'x', 'px');
-    const setDotY = gsap.quickSetter(dot, 'y', 'px');
+    // Use gsap.quickTo for instant, zero-lag fluid tracking
+    const xTo = gsap.quickTo(cursor, 'x', { duration: 0.15, ease: 'power2.out' });
+    const yTo = gsap.quickTo(cursor, 'y', { duration: 0.15, ease: 'power2.out' });
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let currentX = mouseX;
-    let currentY = mouseY;
+    let firstMove = true;
 
     const onMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      setDotX(mouseX);
-      setDotY(mouseY);
+      if (firstMove) {
+        firstMove = false;
+        setIsVisible(true);
+        // Position directly without transition on first frame
+        gsap.set(cursor, { x: e.clientX, y: e.clientY });
+      } else {
+        xTo(e.clientX);
+        yTo(e.clientY);
+      }
     };
 
-    const onMouseDown = () => setIsClicking(true);
-    const onMouseUp = () => setIsClicking(false);
+    const onMouseLeave = () => setIsVisible(false);
+    const onMouseEnter = () => setIsVisible(true);
 
     // Contextual hover inspector
     const onMouseOver = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement)?.closest('[data-cursor], a, button, [role="button"]');
+      const target = (e.target as HTMLElement)?.closest('[data-cursor-label], [data-cursor], a, button');
       if (target) {
         setIsHovering(true);
         const customLabel = target.getAttribute('data-cursor-label');
-        if (customLabel) {
-          setLabel(customLabel);
-        } else {
-          setLabel('');
-        }
+        setLabel(customLabel || '');
       } else {
         setIsHovering(false);
         setLabel('');
@@ -63,60 +52,37 @@ export default function CustomCursor() {
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
-    window.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mouseleave', onMouseLeave);
+    document.addEventListener('mouseenter', onMouseEnter);
     document.addEventListener('mouseover', onMouseOver);
-
-    // RAF loop for buttery smooth cursor follower
-    let rafId: number;
-    const loop = () => {
-      currentX += (mouseX - currentX) * 0.18;
-      currentY += (mouseY - currentY) * 0.18;
-      setCursorX(currentX);
-      setCursorY(currentY);
-      rafId = requestAnimationFrame(loop);
-    };
-    rafId = requestAnimationFrame(loop);
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mousedown', onMouseDown);
-      window.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mouseleave', onMouseLeave);
+      document.removeEventListener('mouseenter', onMouseEnter);
       document.removeEventListener('mouseover', onMouseOver);
-      cancelAnimationFrame(rafId);
-      document.body.classList.remove('has-custom-cursor');
     };
   }, []);
 
-  if (!isEnabled) return null;
-
   return (
-    <>
-      {/* Central precise micro dot */}
-      <div
-        ref={dotRef}
-        className="fixed top-0 left-0 w-1.5 h-1.5 -ml-[3px] -mt-[3px] rounded-full bg-white pointer-events-none z-[9999] mix-blend-difference transition-opacity duration-300"
-        style={{ willChange: 'transform' }}
-      />
-
-      {/* Outer fluid aura ring with contextual label */}
-      <div
-        ref={cursorRef}
-        className={`fixed top-0 left-0 rounded-full pointer-events-none z-[9998] flex items-center justify-center transition-all duration-200 ease-out select-none ${
-          isHovering
-            ? label
-              ? 'w-16 h-16 -ml-8 -mt-8 bg-white text-black font-mono text-[10px] font-bold tracking-wider shadow-lg shadow-black/50'
-              : 'w-12 h-12 -ml-6 -mt-6 border border-white/60 bg-white/10 backdrop-blur-[2px]'
-            : 'w-8 h-8 -ml-4 -mt-4 border border-white/30 bg-transparent'
-        } ${isClicking ? 'scale-75' : 'scale-100'}`}
-        style={{ willChange: 'transform' }}
-      >
-        {label && (
-          <span ref={labelRef} className="animate-fade-in uppercase">
-            {label}
-          </span>
-        )}
-      </div>
-    </>
+    <div
+      ref={cursorRef}
+      className={`fixed top-0 left-0 pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-300 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      } ${
+        isHovering
+          ? label
+            ? 'w-16 h-16 bg-white text-black font-mono text-[10px] font-bold tracking-wider flex items-center justify-center shadow-xl shadow-black/40 scale-100'
+            : 'w-10 h-10 border border-accent bg-accent/15 backdrop-blur-[2px] scale-110'
+          : 'w-7 h-7 border border-white/40 bg-white/5'
+      }`}
+      style={{ willChange: 'transform' }}
+    >
+      {label && isHovering && (
+        <span className="uppercase select-none">
+          {label}
+        </span>
+      )}
+    </div>
   );
 }

@@ -91,13 +91,3 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #8b5cf6;
 }
-
-/* Hide native cursor when custom cursor is active on pointer-fine devices */
-@media (pointer: fine) {
-  body.has-custom-cursor,
-  body.has-custom-cursor a,
-  body.has-custom-cursor button,
-  body.has-custom-cursor [role="button"] {
-    cursor: none !important;
-  }
-}
