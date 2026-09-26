@@ -1,111 +1,95 @@
-// tailwind.config.js
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-    darkMode: ['class'],
-    content: [
+// tailwind.config.ts
+import type { Config } from 'tailwindcss';
+
+const config: Config = {
+  darkMode: ['class'],
+  content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-  	extend: {
-  		animation: {
-  			'fade-in': 'fade-in 0.5s ease-in-out forwards',
-  			'slide-up': 'slide-up 0.5s ease-out forwards',
-  			'slide-down': 'slide-down 0.5s ease-out forwards',
-			  'spin-slow': 'spin 60s linear infinite',
-  			'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear'
-  		},
-		
-  		keyframes: {
-  			'fade-in': {
-  				'0%': {
-  					opacity: '0'
-  				},
-  				'100%': {
-  					opacity: '1'
-  				}
-  			},
-        'border-beam': {
-          '100%': {
-            'offset-distance': '100%',
-          },
+    extend: {
+      colors: {
+        "error": "#ba1a1a",
+        "inverse-on-surface": "#f4f0ef",
+        "outline": "#7e7570",
+        "on-primary-container": "#95918f",
+        "surface-container-low": "#f7f3f2",
+        "surface-container-high": "#ebe7e6",
+        "primary-container": "#2c2a29",
+        "on-tertiary-container": "#9d9085",
+        "on-primary-fixed-variant": "#494645",
+        "inverse-primary": "#cac5c4",
+        "surface-container": "#f1edec",
+        "outline-variant": "#cfc4be",
+        "surface-container-highest": "#e6e2e1",
+        "on-primary": "#ffffff",
+        "surface-tint": "#615e5c",
+        "primary": "#171615",
+        "tertiary-fixed-dim": "#d3c4b8",
+        "on-tertiary-fixed": "#221a13",
+        "surface-bright": "#fdf8f7",
+        "primary-fixed-dim": "#cac5c4",
+        "tertiary-container": "#322921",
+        "inverse-surface": "#313030",
+        "background": "#fdf8f7",
+        "on-primary-fixed": "#1d1b1a",
+        "on-tertiary-fixed-variant": "#4f453c",
+        "on-secondary-fixed-variant": "#4d453f",
+        "secondary-fixed": "#ede0d7",
+        "surface-dim": "#ddd9d8",
+        "surface-container-lowest": "#ffffff",
+        "on-secondary-container": "#6a615a",
+        "on-secondary-fixed": "#201a15",
+        "surface-variant": "#e6e2e1",
+        "on-tertiary": "#ffffff",
+        "on-background": "#1c1b1b",
+        "on-surface": "#1c1b1b",
+        "secondary": "#665d55",
+        "on-surface-variant": "#4d4541",
+        "error-container": "#ffdad6",
+        "tertiary-fixed": "#f0e0d3",
+        "tertiary": "#1c150e",
+        "surface": "#fdf8f7",
+        "on-error": "#ffffff",
+        "secondary-fixed-dim": "#d0c4bb",
+        "on-secondary": "#ffffff",
+        "on-error-container": "#93000a",
+        "secondary-container": "#eaddd4",
+        "primary-fixed": "#e7e1df"
+      },
+      fontFamily: {
+        headline: ["var(--font-headline)", "Newsreader", "serif"],
+        sans: ["var(--font-sans)", "Inter", "sans-serif"],
+        mono: ["var(--font-mono)", "Fira Code", "monospace"]
+      },
+      borderRadius: {
+        DEFAULT: "0.125rem",
+        sm: "0.125rem",
+        md: "0.375rem",
+        lg: "0.5rem",
+        xl: "1rem",
+        full: "9999px"
+      },
+      animation: {
+        'fade-in': 'fade-in 0.5s ease-in-out forwards',
+        'slide-up': 'slide-up 0.5s ease-out forwards',
+        'spin-slow': 'spin 60s linear infinite',
+      },
+      keyframes: {
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' }
         },
-		
-        animation: {
-          'border-beam': 'border-beam var(--duration) infinite linear',
-        },
-  			'slide-up': {
-  				'0%': {
-  					transform: 'translateY(100px)',
-  					opacity: '0'
-  				},
-  				'100%': {
-  					transform: 'translateY(0)',
-  					opacity: '1'
-  				}
-  			},
-  			'slide-down': {
-  				'0%': {
-  					transform: 'translateY(-100px)',
-  					opacity: '0'
-  				},
-  				'100%': {
-  					transform: 'translateY(0)',
-  					opacity: '1'
-  				}
-  			},
-			
-  			
-  		},
-  		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
-  		},
-  		colors: {
-  			background: 'hsl(var(--background))',
-  			foreground: 'hsl(var(--foreground))',
-  			card: {
-  				DEFAULT: 'hsl(var(--card))',
-  				foreground: 'hsl(var(--card-foreground))'
-  			},
-  			popover: {
-  				DEFAULT: 'hsl(var(--popover))',
-  				foreground: 'hsl(var(--popover-foreground))'
-  			},
-  			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
-  			},
-  			secondary: {
-  				DEFAULT: 'hsl(var(--secondary))',
-  				foreground: 'hsl(var(--secondary-foreground))'
-  			},
-  			muted: {
-  				DEFAULT: 'hsl(var(--muted))',
-  				foreground: 'hsl(var(--muted-foreground))'
-  			},
-  			accent: {
-  				DEFAULT: 'hsl(var(--accent))',
-  				foreground: 'hsl(var(--accent-foreground))'
-  			},
-  			destructive: {
-  				DEFAULT: 'hsl(var(--destructive))',
-  				foreground: 'hsl(var(--destructive-foreground))'
-  			},
-  			border: 'hsl(var(--border))',
-  			input: 'hsl(var(--input))',
-  			ring: 'hsl(var(--ring))',
-  			chart: {
-  				'1': 'hsl(var(--chart-1))',
-  				'2': 'hsl(var(--chart-2))',
-  				'3': 'hsl(var(--chart-3))',
-  				'4': 'hsl(var(--chart-4))',
-  				'5': 'hsl(var(--chart-5))'
-  			}
-  		}
-  	}
+        'slide-up': {
+          '0%': { transform: 'translateY(40px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' }
+        }
+      }
+    }
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
+
+export default config;

@@ -1,7 +1,6 @@
 'use client';
 
 import Hero from './components/home/hero';
-import { GridPattern } from './components/ui/grid-pattern';
 import Skills from './components/about/Skills';
 import ExperienceSection from './components/about/Experience';
 import AchievementGrid from './components/about/Timeline';
@@ -10,54 +9,31 @@ import { AboutMe } from './components/about-me';
 import dynamic from 'next/dynamic';
 
 const AwesomeContact = dynamic(() => import('./components/layout/Footer'), { ssr: false });
-const ThankYouSection = dynamic(() => import('./components/Thankyou'), { ssr: false });
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Background Cybernetic Grid Pattern */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <GridPattern
-          width={48}
-          height={48}
-          x={-1}
-          y={-1}
-          strokeDasharray="1 3"
-          className="absolute inset-0 h-full w-full skew-y-12 fill-transparent stroke-purple-500/10"
-          squares={[
-            [1, 3],
-            [3, 1],
-            [5, 4],
-            [7, 2],
-            [9, 5],
-            [11, 2],
-          ]}
-        />
-      </div>
-
-      {/* Main Content Container */}
+    <div className="relative min-h-screen">
       <main className="relative z-10">
-        {/* Hero Section */}
+        {/* Editorial Hero Section */}
         <Hero />
 
-        {/* Neural Dossier / About Me */}
-        <section className="container mx-auto relative z-20">
-          <AboutMe />
-        </section>
+        {/* 01 / Background & Ethos */}
+        <AboutMe />
 
-        {/* Featured AI & Full-Stack Projects */}
+        {/* 02 / Featured Case Studies */}
         <InsightsSection />
 
-        {/* Neural Tech Skills Matrix */}
-        <div className="relative z-20">
-          <Skills />
-          <ExperienceSection />
-          <AchievementGrid />
-          
-          {/* Outro & Contact Console */}
-          <ThankYouSection />
-          <AwesomeContact />
-        </div>
+        {/* 03 / Core Architectural Arsenal */}
+        <Skills />
+
+        {/* 04 / Professional Track Record */}
+        <ExperienceSection />
+
+        {/* 05 / Spotlight & Milestones */}
+        <AchievementGrid />
+        
+        {/* 06 / Initiate Contact & Architectural Footer */}
+        <AwesomeContact />
       </main>
     </div>
   );
