@@ -4,41 +4,44 @@ import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
 export default function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const [label, setLabel] = useState<string>('');
-  const [isHovering, setIsHovering] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const [label, setLabel] = useState('');
+  const [isHovering, setIsHovering] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Only enable on devices with fine pointer (mouse/trackpad), not touch
+    // Only enable on devices with fine pointer (mouse/trackpad), not touch screens
     const isFinePointer = window.matchMedia('(pointer: fine)').matches;
     if (!isFinePointer) return;
 
-    const cursor = cursorRef.current;
-    if (!cursor) return;
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
 
-    // Use gsap.quickTo for instant, zero-lag fluid tracking
-    const xTo = gsap.quickTo(cursor, 'x', { duration: 0.15, ease: 'power2.out' });
-    const yTo = gsap.quickTo(cursor, 'y', { duration: 0.15, ease: 'power2.out' });
+    // Outer ring follows with an ultra-responsive 0.08s spring
+    const ringX = gsap.quickTo(ring, 'x', { duration: 0.08, ease: 'power2.out' });
+    const ringY = gsap.quickTo(ring, 'y', { duration: 0.08, ease: 'power2.out' });
 
-    let firstMove = true;
+    let isFirst = true;
 
     const onMouseMove = (e: MouseEvent) => {
-      if (firstMove) {
-        firstMove = false;
+      // Direct hardware-matched positioning with zero latency
+      dot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+
+      if (isFirst) {
+        isFirst = false;
         setIsVisible(true);
-        // Position directly without transition on first frame
-        gsap.set(cursor, { x: e.clientX, y: e.clientY });
+        gsap.set(ring, { x: e.clientX, y: e.clientY });
       } else {
-        xTo(e.clientX);
-        yTo(e.clientY);
+        ringX(e.clientX);
+        ringY(e.clientY);
       }
     };
 
     const onMouseLeave = () => setIsVisible(false);
     const onMouseEnter = () => setIsVisible(true);
 
-    // Contextual hover inspector
     const onMouseOver = (e: MouseEvent) => {
       const target = (e.target as HTMLElement)?.closest('[data-cursor-label], [data-cursor], a, button');
       if (target) {
@@ -65,24 +68,38 @@ export default function CustomCursor() {
   }, []);
 
   return (
-    <div
-      ref={cursorRef}
-      className={`fixed top-0 left-0 pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-300 ${
-        isVisible ? 'opacity-100' : 'opacity-0'
-      } ${
-        isHovering
-          ? label
-            ? 'w-16 h-16 bg-white text-black font-mono text-[10px] font-bold tracking-wider flex items-center justify-center shadow-xl shadow-black/40 scale-100'
-            : 'w-10 h-10 border border-accent bg-accent/15 backdrop-blur-[2px] scale-110'
-          : 'w-7 h-7 border border-white/40 bg-white/5'
-      }`}
-      style={{ willChange: 'transform' }}
-    >
-      {label && isHovering && (
-        <span className="uppercase select-none">
-          {label}
-        </span>
-      )}
-    </div>
+    <>
+      {/* Zero-latency precision pointer dot (exact pixel alignment) */}
+      <div
+        ref={dotRef}
+        className={`fixed top-0 left-0 pointer-events-none z-[9999] rounded-full transition-opacity duration-150 ${
+          isVisible ? 'opacity-100' : 'opacity-0'
+        } ${
+          isHovering ? 'w-2 h-2 bg-accent shadow-sm shadow-accent' : 'w-1.5 h-1.5 bg-white'
+        }`}
+        style={{ willChange: 'transform' }}
+      />
+
+      {/* Smooth, low-latency magnetic aura ring with high-contrast label */}
+      <div
+        ref={ringRef}
+        className={`fixed top-0 left-0 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-150 ${
+          isVisible ? 'opacity-100' : 'opacity-0'
+        } ${
+          isHovering && label
+            ? 'w-20 h-20 bg-accent/20 border border-accent/70 backdrop-blur-[2px] flex items-center justify-center shadow-lg shadow-accent/30'
+            : isHovering
+            ? 'w-11 h-11 border border-accent/60 bg-accent/15'
+            : 'w-7 h-7 border border-white/30 bg-white/[0.02]'
+        }`}
+        style={{ willChange: 'transform' }}
+      >
+        {label && isHovering && (
+          <span className="font-mono text-[9px] text-white font-bold tracking-widest uppercase select-none drop-shadow">
+            {label}
+          </span>
+        )}
+      </div>
+    </>
   );
 }

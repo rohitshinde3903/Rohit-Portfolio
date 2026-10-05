@@ -11,7 +11,6 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Respect user's reduced motion preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
@@ -25,8 +24,6 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     });
 
     lenisRef.current = lenis;
-
-    // Connect Lenis to ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
     const updateTicker = (time: number) => {

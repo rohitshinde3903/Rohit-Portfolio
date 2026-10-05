@@ -10,38 +10,55 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#070709',
-        surface: '#0d0d12',
-        'surface-elevated': '#14141b',
-        'border-subtle': 'rgba(255, 255, 255, 0.08)',
-        'border-focus': 'rgba(255, 255, 255, 0.2)',
-        primary: '#f8fafc',
-        secondary: '#94a3b8',
-        muted: '#64748b',
+        bg: '#050505',
+        'bg-elevated': '#0a0a0a',
+        'bg-card': '#0e0e0e',
+        'bg-hover': '#141414',
+        'border-dim': 'rgba(255,255,255,0.06)',
+        'border-lite': 'rgba(255,255,255,0.12)',
+        'border-accent': 'rgba(139,92,246,0.3)',
+        'text-primary': '#f1f5f9',
+        'text-secondary': '#94a3b8',
+        'text-muted': '#64748b',
+        'text-dim': '#475569',
         accent: {
           DEFAULT: '#8b5cf6',
-          violet: '#7c3aed',
-          cyan: '#06b6d4',
-          amber: '#f59e0b',
-        }
+          light: '#a78bfa',
+          dark: '#7c3aed',
+          glow: 'rgba(139,92,246,0.15)',
+        },
+        cyan: {
+          DEFAULT: '#06b6d4',
+          glow: 'rgba(6,182,212,0.12)',
+        },
+        emerald: {
+          DEFAULT: '#10b981',
+        },
       },
       fontFamily: {
-        display: ['var(--font-display)', 'Syne', 'Space Grotesk', 'sans-serif'],
-        sans: ['var(--font-sans)', 'Inter', 'sans-serif'],
-        mono: ['var(--font-mono)', 'Fira Code', 'monospace'],
-      },
-      fontSize: {
-        'hero-clamp': 'clamp(3.5rem, 8vw, 9.5rem)',
-        'heading-clamp': 'clamp(2.5rem, 6vw, 6.5rem)',
-        'subheading-clamp': 'clamp(1.75rem, 3.5vw, 3.5rem)',
+        display: ['Syne', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       animation: {
-        'spin-slow': 'spin 30s linear infinite',
-        'pulse-subtle': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-      }
-    }
+        'spin-slow': 'spin 25s linear infinite',
+        'pulse-soft': 'pulse 4s cubic-bezier(0.4,0,0.6,1) infinite',
+        'marquee': 'marquee 40s linear infinite',
+        'marquee-reverse': 'marquee-reverse 35s linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        'marquee-reverse': {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0%)' },
+        },
+      },
+    },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require('tailwindcss-animate')],
 };
 
 export default config;

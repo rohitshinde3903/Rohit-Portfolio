@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,88 +6,107 @@
 
 @layer base {
   :root {
-    --font-display: 'Syne', sans-serif;
-    --font-sans: 'Inter', sans-serif;
-    --font-mono: 'Fira Code', monospace;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
   }
 
   html {
-    scroll-behavior: initial; /* Lenis handles smooth scrolling */
-    background-color: #070709;
-    color: #f8fafc;
+    scroll-behavior: initial;
+    background-color: #050505;
+    color: #f1f5f9;
   }
 
   body {
-    background-color: #070709;
-    color: #f8fafc;
+    background-color: #050505;
+    color: #f1f5f9;
     font-family: 'Inter', sans-serif;
     overflow-x: hidden;
-    position: relative;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    cursor: default;
+  }
+
+  ::selection {
+    background: rgba(139, 92, 246, 0.3);
+    color: #f1f5f9;
   }
 }
 
-/* Subtle Film Grain Texture Overlay */
-.film-grain {
+/* Noise texture overlay */
+.noise-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   pointer-events: none;
-  z-index: 999;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  z-index: 9998;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
 }
 
-/* Typography Helpers */
-.font-display {
-  font-family: 'Syne', sans-serif;
+/* Horizontal rule glow */
+.hr-glow {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
 }
 
-.font-mono {
-  font-family: 'Fira Code', monospace;
+/* Text clip utility */
+.text-gradient {
+  background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Text Masking & Cinematic Line Clamps */
+/* Reveal mask for GSAP text animations */
 .line-mask {
   overflow: hidden;
   display: block;
 }
 
-/* Infinite Marquee */
-@keyframes marquee-infinite {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+.line-mask > * {
+  display: block;
+  transform: translateY(110%);
 }
 
-.animate-marquee-smooth {
-  display: flex;
-  width: max-content;
-  animation: marquee-infinite 30s linear infinite;
-  will-change: transform;
+/* Section number styling */
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #64748b;
 }
 
-.animate-marquee-smooth:hover {
-  animation-play-state: paused;
-}
-
-/* Custom Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #070709;
+  background: #050505;
 }
 ::-webkit-scrollbar-thumb {
-  background: #272733;
+  background: #1e1e2e;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #8b5cf6;
+}
+
+/* Magnetic hover glow */
+.magnetic-glow {
+  position: relative;
+}
+.magnetic-glow::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(6,182,212,0.1));
+  opacity: 0;
+  transition: opacity 0.4s;
+  z-index: -1;
+  filter: blur(12px);
+}
+.magnetic-glow:hover::after {
+  opacity: 1;
 }

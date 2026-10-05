@@ -4,44 +4,47 @@ import '../app/globals.css';
 import { Navbar } from './components/layout/Navbar';
 import SmoothScroll from './components/animations/SmoothScroll';
 import CustomCursor from './components/ui/CustomCursor';
+import Preloader from './components/ui/Preloader';
 import { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const handlePreloaderComplete = () => {
+    setLoading(false);
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 150);
+  };
+
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        <title>Rohit Shinde &bull; GenAI Engineer &amp; LLM/RAG Architect</title>
+        <title>Rohit Shinde — GenAI Architect & Systems Engineer</title>
         <meta
           name="description"
-          content="Portfolio of Rohit Shinde — GenAI Engineer specializing in Large Language Models, Production RAG, Agentic AI, PyTorch, and Scalable Cloud Backends."
+          content="Rohit Shinde — GenAI Engineer building production AI systems. Fine-tuning SLMs, engineering deterministic RAG, and architecting scalable Python backends."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/images/icon.ico" />
       </head>
-      <body className="bg-background text-primary antialiased font-sans selection:bg-accent selection:text-primary">
-        {/* Subtle Film Grain Noise Texture */}
-        <div className="film-grain" aria-hidden="true" />
-
-        {/* Custom Desktop Interactive Cursor */}
+      <body className="bg-bg text-text-primary antialiased font-sans" suppressHydrationWarning>
+        <div className="noise-overlay" aria-hidden="true" />
         <CustomCursor />
 
-        {/* Smooth Scrolling Provider */}
+        {loading && <Preloader onComplete={handlePreloaderComplete} />}
+
         <SmoothScroll>
           <div
-            className={cn(
-              'relative z-10 transition-opacity duration-700 min-h-screen flex flex-col',
-              mounted ? 'opacity-100' : 'opacity-0'
-            )}
+            className={`relative z-10 transition-opacity duration-700 min-h-screen flex flex-col ${
+              mounted && !loading ? 'opacity-100' : 'opacity-0'
+            }`}
           >
             <Navbar />
             <div className="flex-1">{children}</div>
@@ -51,3 +54,4 @@ export default function RootLayout({
     </html>
   );
 }
+
