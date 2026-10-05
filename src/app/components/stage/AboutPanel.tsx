@@ -17,10 +17,10 @@ export default function AboutPanel({ onAdvance, isActive }: AboutPanelProps) {
     'CUDA C++',
     'TensorRT',
     'LangGraph',
+    'vLLM',
+    'Agentic AI',
     'Python',
     'FastAPI',
-    'vLLM',
-    'Gemma 3B',
     'Qdrant',
     'Docker / K8s',
     'React',
@@ -28,118 +28,168 @@ export default function AboutPanel({ onAdvance, isActive }: AboutPanelProps) {
   ];
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-between px-6 sm:px-12 md:px-16 pt-24 pb-8 select-none overflow-y-auto bg-obsidian text-slate-100">
-      <div className="max-w-7xl mx-auto w-full my-auto space-y-8 sm:space-y-12">
-        {/* Section Tag matching prototype */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-zinc-800 gap-4">
+    <div className="relative w-full h-full flex flex-col justify-between px-4 sm:px-10 md:px-16 pt-20 sm:pt-24 pb-6 sm:pb-8 select-none overflow-y-auto bg-obsidian text-slate-100">
+      <div className="max-w-7xl mx-auto w-full my-auto space-y-6 sm:space-y-8">
+        {/* Top HUD Telemetry Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 sm:pb-5 border-b border-zinc-800/80 gap-3">
           <div className="flex items-center gap-3 font-mono text-xs tracking-widest text-cyan-400 uppercase">
-            <span className="w-2.5 h-2.5 bg-cyan-400 inline-block" />
+            <span className="w-2.5 h-2.5 bg-cyan-400 shadow-[0_0_10px_#00F0FF] inline-block" />
             <span>/ABOUT — IN PROCESS SINCE 2003</span>
           </div>
-          <div className="text-xs font-mono text-zinc-400 uppercase tracking-wider">
-            PARADIGM: ZERO-COMPROMISE PERFORMANCE &amp; INTELLIGENCE
+          <div className="flex items-center gap-2 font-mono text-[11px] text-zinc-400 uppercase tracking-wider">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>DIRECTIVE: COMPLETE EVERYTHING • SHIP REAL SYSTEMS</span>
           </div>
         </div>
 
-        {/* Big Manifesto Text & Spec Card Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Left Column: Big Manifesto */}
-          <div className="lg:col-span-8 space-y-6">
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-tight"
-            >
-              I build high-throughput{' '}
-              <span className="text-cyan-400 underline decoration-cyan-400/30">
-                AI architectures
-              </span>{' '}
-              and distributed low-latency compute foundations.
-            </motion.p>
+        {/* Hero Identity Headline */}
+        <div className="space-y-3">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="font-mono text-xs sm:text-sm text-cyan-400 uppercase tracking-[0.25em] font-semibold">
+              // OPERATING IDENTITY
+            </span>
+            <h2 className="font-display font-black text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-white tracking-tight uppercase leading-[1.08] mt-1">
+              Precise. Efficient. Reliable.{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">
+                Task-Oriented.
+              </span>
+            </h2>
+          </motion.div>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="text-base sm:text-xl text-zinc-400 font-light leading-relaxed"
-            >
-              Obsessed with breaking traditional algorithmic bottlenecks. Bridging the gap between raw hardware primitives (vector search, edge model quantization, async runtimes) and emergent foundation model architectures.
-            </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="font-mono text-xs sm:text-sm text-zinc-300 uppercase tracking-widest flex flex-wrap items-center gap-2"
+          >
+            <span className="text-white font-bold bg-white/10 px-2 py-0.5 rounded border border-white/15">
+              AI GEEK
+            </span>
+            <span className="text-cyan-400 font-bold bg-cyan-400/10 px-2 py-0.5 rounded border border-cyan-400/20">
+              VIBE CODER
+            </span>
+            <span className="text-zinc-500">•</span>
+            <span className="text-zinc-400">WITH SECURITY &amp; SCALABILITY NUANCES</span>
+          </motion.p>
+        </div>
 
-            {/* Key Pillars Grid */}
-            <motion.div
-              initial={{ opacity: 0, y: 25 }}
-              animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
-              transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-zinc-900 font-mono"
-            >
-              <div className="bg-zinc-900/60 p-4 rounded border border-zinc-800/80">
-                <div className="text-2xl font-bold text-white">01</div>
-                <div className="text-xs text-zinc-400 mt-1 uppercase">Distributed Systems</div>
-              </div>
-              <div className="bg-zinc-900/60 p-4 rounded border border-zinc-800/80">
-                <div className="text-2xl font-bold text-cyan-400">&lt;50ms</div>
-                <div className="text-xs text-zinc-400 mt-1 uppercase">Inference TTFT</div>
-              </div>
-              <div className="bg-zinc-900/60 p-4 rounded border border-zinc-800/80">
-                <div className="text-2xl font-bold text-white">9.45</div>
-                <div className="text-xs text-zinc-400 mt-1 uppercase">CGPA Distinction</div>
-              </div>
-              <div className="bg-zinc-900/60 p-4 rounded border border-zinc-800/80">
-                <div className="text-2xl font-bold text-white">2003</div>
-                <div className="text-xs text-zinc-400 mt-1 uppercase">Origin Year</div>
-              </div>
-            </motion.div>
+        {/* Centerpiece Manifesto Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
+          transition={{ duration: 0.85, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="p-5 sm:p-7 rounded-xl bg-gradient-to-br from-zinc-900/90 via-zinc-950/95 to-black border border-white/10 relative overflow-hidden backdrop-blur-md shadow-2xl"
+        >
+          {/* Subtle Ambient Glow */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between pb-3.5 border-b border-white/10 font-mono text-[11px] text-zinc-400 uppercase gap-2">
+            <span className="flex items-center gap-2 text-zinc-300">
+              <span className="inline-block w-2 h-2 bg-cyan-400 shadow-[0_0_8px_#00F0FF]" />
+              THE CORE PHILOSOPHY
+            </span>
+            <span className="text-emerald-400 font-semibold tracking-widest">
+              ZERO ABANDONED PROTOTYPES // 100% COMPLETION
+            </span>
           </div>
 
-          {/* Right Column: Deep Spec Card */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
-            transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-4 bg-zinc-950 p-6 sm:p-8 border border-zinc-800 rounded-lg relative overflow-hidden shadow-2xl"
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+          <p className="text-base sm:text-xl lg:text-2xl text-zinc-100 font-light leading-relaxed mt-4">
+            I am unapologetically <span className="text-white font-bold">egoistic about shipping</span> and{' '}
+            <span className="text-cyan-400 font-bold">completing everything</span> I start. I don’t leave
+            ambitious concepts in prototype purgatory—I turn raw ideas into{' '}
+            <span className="text-white font-semibold underline decoration-cyan-400/50 underline-offset-4">
+              real-life working systems and production products
+            </span>
+            .
+          </p>
 
-            <h3 className="text-xs font-mono uppercase tracking-widest text-zinc-400 mb-6">
-              Tech Stack &amp; Weaponry
-            </h3>
+          <p className="text-xs sm:text-sm md:text-base text-zinc-400 leading-relaxed mt-3 font-sans">
+            An AI Geek who codes in pure flow-state vibe, backed by deep architectural discipline around{' '}
+            <span className="text-zinc-200 font-medium">Security and Scalability nuances</span>: hardened auth boundaries,
+            context hygiene, low-latency inferencing, and distributed runtimes engineered to compute effortlessly under load.
+          </p>
+        </motion.div>
 
-            <div className="flex flex-wrap gap-2">
-              {techStack.map((tech) => (
-                <span
-                  key={tech}
-                  className="px-2.5 py-1 text-xs font-mono bg-zinc-900 text-zinc-200 border border-zinc-700 rounded hover:border-cyan-400 transition-colors"
-                >
-                  {tech}
+        {/* 4 Core Pillars Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 font-mono"
+        >
+          {about.traits?.map((trait) => (
+            <div
+              key={trait.number}
+              className="group bg-zinc-950/70 hover:bg-zinc-900/80 p-4 sm:p-5 rounded-lg border border-zinc-800/90 hover:border-cyan-400/50 transition-all duration-300 relative overflow-hidden shadow-lg"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs text-zinc-400 group-hover:text-cyan-400 transition-colors font-bold">
+                  [{trait.number}]
                 </span>
-              ))}
+                <span className="text-[9px] uppercase tracking-wider text-cyan-400/80 bg-cyan-400/10 px-1.5 py-0.5 rounded border border-cyan-400/20">
+                  {trait.tag}
+                </span>
+              </div>
+              <div className="text-sm font-bold text-white uppercase tracking-tight group-hover:text-cyan-300 transition-colors">
+                {trait.title}
+              </div>
+              <div className="text-xs text-zinc-400 mt-2 leading-relaxed font-sans font-light">
+                {trait.description}
+              </div>
             </div>
+          ))}
+        </motion.div>
 
-            <div className="mt-8 pt-6 border-t border-zinc-800">
-              <h4 className="text-xs font-mono uppercase tracking-wider text-zinc-300">
-                Core Engineering Mindset
-              </h4>
-              <p className="mt-2 text-sm text-zinc-400 leading-relaxed font-sans">
-                &ldquo;Code that computes effortlessly under pressure is not accidental; it is sculpted with precision, hardware-awareness, and unrelenting curiosity.&rdquo;
-              </p>
+        {/* Bottom Hardware Telemetry & Weaponry Strip */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center pt-2">
+          {/* Key Metrics */}
+          <div className="lg:col-span-5 grid grid-cols-3 gap-2.5 font-mono text-center">
+            <div className="bg-zinc-950/80 p-2.5 sm:p-3 rounded border border-zinc-800">
+              <div className="text-lg sm:text-xl font-black text-cyan-400">9.45</div>
+              <div className="text-[9px] text-zinc-400 uppercase tracking-widest mt-0.5">CGPA Distinction</div>
             </div>
-          </motion.div>
+            <div className="bg-zinc-950/80 p-2.5 sm:p-3 rounded border border-zinc-800">
+              <div className="text-lg sm:text-xl font-black text-white">&lt;50ms</div>
+              <div className="text-[9px] text-zinc-400 uppercase tracking-widest mt-0.5">Inference TTFT</div>
+            </div>
+            <div className="bg-zinc-950/80 p-2.5 sm:p-3 rounded border border-zinc-800">
+              <div className="text-lg sm:text-xl font-black text-emerald-400">100%</div>
+              <div className="text-[9px] text-zinc-400 uppercase tracking-widest mt-0.5">Completion Rate</div>
+            </div>
+          </div>
+
+          {/* Weaponry Arsenal Pills */}
+          <div className="lg:col-span-7 flex flex-wrap items-center gap-1.5">
+            <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider mr-1">
+              ARSENAL:
+            </span>
+            {techStack.map((tech) => (
+              <span
+                key={tech}
+                className="px-2 py-0.5 text-[11px] font-mono bg-zinc-900/90 text-zinc-300 border border-zinc-800 rounded hover:border-cyan-400/60 hover:text-white transition-colors"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Bottom Nav / Advance Button */}
-      <div className="max-w-7xl mx-auto w-full flex justify-between items-center pt-4 border-t border-zinc-800">
-        <span className="font-mono text-xs text-zinc-500 uppercase tracking-wider">
-          02 // MANIFESTO &amp; SPEC
+      <div className="max-w-7xl mx-auto w-full flex justify-between items-center pt-3 border-t border-zinc-800/80 shrink-0">
+        <span className="font-mono text-xs text-zinc-400 uppercase tracking-wider">
+          02 // OPERATING DIRECTIVE
         </span>
         <button
           onClick={onAdvance}
-          data-cursor-label="WORKS"
+          data-cursor-label="PROJECTS"
           className="group inline-flex items-center gap-2 font-mono text-xs text-cyan-400 hover:text-white uppercase tracking-widest transition-colors cursor-pointer"
         >
-          <span>View Engineered Artifacts</span>
+          <span>View Engineered Projects (04)</span>
           <span className="transform group-hover:translate-y-0.5 transition-transform">&darr;</span>
         </button>
       </div>

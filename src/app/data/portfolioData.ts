@@ -54,18 +54,44 @@ export const portfolioData = {
   about: {
     tag: '/ABOUT',
     since: 'IN PROCESS SINCE 2003',
-    headline: 'IN PROCESS\nSINCE 2003.',
-    lead: 'I build things with code, AI and curiosity.',
-    subLead: 'AI Engineer. Full Stack Developer. Builder. Problem Solver.',
-    narrative: [
-      'I don’t just write code. I build intelligent products and experiences that turn abstract complexity into high-throughput systems.',
-      'From fine-tuning small language models on domain data to orchestrating multi-agent state graphs, I engineer software that learns, acts, and scales reliably.',
+    headline: 'PRECISE. EFFICIENT. RELIABLE. TASK-ORIENTED.',
+    lead: 'I turn ideas into real-life working systems & products—completing everything I start with zero compromise.',
+    subLead: 'AI Geek • Vibe Coder with Security & Scalability Nuances • Systems Builder',
+    personaStatement:
+      'I am Precise, Efficient, Reliable, Task-Oriented, and unapologetically Egoistic about shipping. I complete everything I start, turning raw ideas into real-life, production-grade working systems and products.',
+    geekManifesto:
+      'I am an AI Geek and a Vibe Coder armed with deep Security and Scalability nuances. I combine flow-state prototyping speed with the architectural discipline required to make systems resilient, hardened, and high-throughput under pressure.',
+    traits: [
+      {
+        number: '01',
+        title: 'PRECISE & EFFICIENT',
+        tag: 'ZERO_BLOAT',
+        description: 'Surgical code execution. Optimal algorithmic pathways, low-latency compute, and zero fluff.',
+      },
+      {
+        number: '02',
+        title: 'RELIABLE & TASK-ORIENTED',
+        tag: '100%_COMPLETION',
+        description: 'Relentless drive to close every loop. Turning abstract concepts into shipped, working reality.',
+      },
+      {
+        number: '03',
+        title: 'EGOISTIC ABOUT EXCELLENCE',
+        tag: 'HIGH_STANDARDS',
+        description: 'No half-baked demos or sloppy hacks. Uncompromising pride in engineering craft and system longevity.',
+      },
+      {
+        number: '04',
+        title: 'AI GEEK // VIBE CODER',
+        tag: 'SECURITY_&_SCALE',
+        description: 'High-speed flow-state velocity built atop defense-in-depth, hardened auth, and distributed scale.',
+      },
     ],
     distinctions: [
       { label: 'ACADEMICS', value: '9.45 CGPA Distinction' },
       { label: 'DISCIPLINE', value: 'Computer Engineering' },
       { label: 'SPECIALIZATION', value: 'GenAI & Autonomous Agent Systems' },
-      { label: 'FOCUS', value: 'Zero-to-One Product Architecture' },
+      { label: 'DELIVERY', value: 'Idea to Live Product' },
     ],
   },
 

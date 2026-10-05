@@ -40,15 +40,21 @@ export default function StageController() {
     }
   }, []);
 
+  const [aboutCardStep, setAboutCardStep] = useState(1);
+
   const goToStage = useCallback((targetIndex: number) => {
     if (targetIndex >= 0 && targetIndex < TOTAL_STAGES) {
+      if (targetIndex === 2) {
+        // If coming backwards from Projects (3), show all 4 cards; otherwise start from card 1
+        setAboutCardStep((prev) => (activeStage > 2 ? 4 : 1));
+      }
       setActiveStage(targetIndex);
       isThrottled.current = true;
       setTimeout(() => {
         isThrottled.current = false;
       }, 750);
     }
-  }, []);
+  }, [activeStage]);
 
   const nextStage = useCallback(() => {
     if (isThrottled.current) return;
@@ -57,21 +63,35 @@ export default function StageController() {
       // Trigger the 3D scattering & fly-through camera transition on LandingPanel
       isThrottled.current = true;
       setTriggerLandingExit(true);
+    } else if (activeStage === 2 && aboutCardStep < 4) {
+      // On About stage, reveal cards 1 -> 2 -> 3 -> 4 one by one on scroll
+      setAboutCardStep((prev) => Math.min(4, prev + 1));
+      isThrottled.current = true;
+      setTimeout(() => {
+        isThrottled.current = false;
+      }, 450);
     } else if (activeStage < TOTAL_STAGES - 1) {
       goToStage(activeStage + 1);
     }
-  }, [activeStage, goToStage]);
+  }, [activeStage, aboutCardStep, goToStage]);
 
   const prevStage = useCallback(() => {
     if (isThrottled.current) return;
 
-    if (activeStage > 0) {
+    if (activeStage === 2 && aboutCardStep > 1) {
+      // On About stage, step backwards through cards: 4 -> 3 -> 2 -> 1
+      setAboutCardStep((prev) => Math.max(1, prev - 1));
+      isThrottled.current = true;
+      setTimeout(() => {
+        isThrottled.current = false;
+      }, 450);
+    } else if (activeStage > 0) {
       if (activeStage === 1) {
         setTriggerLandingExit(false);
       }
       goToStage(activeStage - 1);
     }
-  }, [activeStage, goToStage]);
+  }, [activeStage, aboutCardStep, goToStage]);
 
   const handleLandingAdvance = useCallback(() => {
     setActiveStage(1);

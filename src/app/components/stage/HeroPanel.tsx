@@ -84,17 +84,28 @@ export default function HeroPanel({ onAdvance, isActive }: HeroPanelProps) {
               ? { opacity: 1, scale: 1, filter: 'blur(0px)' }
               : { opacity: 0, scale: 1.04, filter: 'blur(6px)' }
           }
+          whileHover={{
+            scale: 1.035,
+            y: -10,
+            transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+          }}
           transition={{ duration: 1.1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-25 flex flex-col items-center justify-end h-full max-h-[75vh]"
+          className="relative z-25 flex flex-col items-center justify-end h-full max-h-[78vh] group cursor-pointer pointer-events-auto select-none"
+          data-cursor-label="ROHIT"
         >
+          {/* Dynamic Cyan Aura on Hover */}
+          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-cyan-500/25 via-blue-500/15 to-transparent blur-3xl rounded-full scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
+
           <img
             src={hero.portraitImage}
             alt="Rohit Shinde — Full portrait cutout"
-            className="h-[48vh] sm:h-[54vh] md:h-[68vh] lg:h-[78vh] max-h-[540px] w-auto object-contain object-bottom pointer-events-none drop-shadow-[0_25px_50px_rgba(0,0,0,0.95)]"
+            className="h-[48vh] sm:h-[54vh] md:h-[68vh] lg:h-[78vh] max-h-[580px] w-auto object-contain object-bottom pointer-events-auto drop-shadow-[0_25px_50px_rgba(0,0,0,0.95)] group-hover:drop-shadow-[0_35px_65px_rgba(0,240,255,0.35)] transition-all duration-500"
           />
 
           {/* Metadata badge below portrait */}
-          
+          <div className="mt-1 text-[9px] sm:text-[10px] font-mono tracking-widest text-zinc-400 group-hover:text-cyan-300 bg-black/90 group-hover:border-cyan-400/40 px-3 py-0.5 rounded-full border border-white/15 uppercase z-30 shadow-lg transition-colors duration-300">
+            LOC: PUNE, INDIA (IST) // THE GAME CHANGER
+          </div>
         </motion.div>
 
         {/* Lower Tier: "DIFFERENT" Across Bottom (100% visible on screen, scaled cleanly) */}
