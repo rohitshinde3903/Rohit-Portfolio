@@ -9,10 +9,10 @@ interface PreloaderProps {
 
 export default function Preloader({ onComplete }: PreloaderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const nameRef = useRef<HTMLDivElement>(null);
-  const subtitleRef = useRef<HTMLDivElement>(null);
-  const barRef = useRef<HTMLDivElement>(null);
+  const nameRef = useRef<HTMLHeadingElement>(null);
+  const subRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -27,7 +27,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         },
       });
 
-      // Counter animation
+      // Numerical counter from 00 to 100
       const counter = { val: 0 };
       tl.to(counter, {
         val: 100,
@@ -35,89 +35,83 @@ export default function Preloader({ onComplete }: PreloaderProps) {
         ease: 'power2.inOut',
         onUpdate: () => {
           if (counterRef.current) {
-            counterRef.current.textContent = Math.floor(counter.val).toString().padStart(3, '0');
+            counterRef.current.textContent = Math.floor(counter.val).toString().padStart(2, '0');
           }
         },
       }, 0);
 
-      // Loading bar
-      tl.to(barRef.current, {
+      // Loading line
+      tl.to(lineRef.current, {
         scaleX: 1,
         duration: 1.2,
         ease: 'power2.inOut',
       }, 0);
 
-      // Name letters staggered reveal
-      if (nameRef.current) {
-        const letters = nameRef.current.querySelectorAll('.letter');
-        tl.fromTo(
-          letters,
-          { y: 80, opacity: 0, rotateX: -90 },
-          {
-            y: 0,
-            opacity: 1,
-            rotateX: 0,
-            duration: 0.8,
-            stagger: 0.04,
-            ease: 'power3.out',
-          },
-          0.1
-        );
-      }
-
-      // Subtitle reveal
+      // Editorial Name Reveal
       tl.fromTo(
-        subtitleRef.current,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
-        0.8
+        nameRef.current,
+        { y: 40, opacity: 0, filter: 'blur(8px)' },
+        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' },
+        0.1
       );
 
-      // Hold then exit
-      tl.to({}, { duration: 0.5 });
+      // Subtitle Reveal
+      tl.fromTo(
+        subRef.current,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' },
+        0.3
+      );
+
+      // Hold briefly then exit
+      tl.to({}, { duration: 0.25 });
     }, containerRef);
 
     return () => ctx.revert();
   }, [onComplete]);
 
-  const name = 'ROHIT SHINDE';
-
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[9999] bg-bg flex flex-col items-center justify-center"
+      className="fixed inset-0 z-[9999] bg-[#07110D] text-[#FAF9F5] flex flex-col justify-between p-8 sm:p-12 select-none"
     >
-      {/* Name */}
-      <div ref={nameRef} className="flex items-center gap-[2px] mb-4" style={{ perspective: '600px' }}>
-        {name.split('').map((char, i) => (
-          <span
-            key={i}
-            className="letter inline-block font-display font-extrabold text-4xl sm:text-6xl md:text-7xl text-text-primary tracking-tight"
-            style={{ transformOrigin: 'bottom center' }}
-          >
-            {char === ' ' ? '\u00A0' : char}
-          </span>
-        ))}
+      {/* Top technical coordinates */}
+      <div className="flex justify-between items-center font-mono text-[11px] tracking-widest text-[#25C98A]/70 uppercase">
+        <span>LOC // 18.5204° N, 73.8567° E</span>
+        <span>INDEX // 2026.04</span>
       </div>
 
-      {/* Subtitle */}
-      <div ref={subtitleRef} className="font-mono text-xs text-text-muted tracking-[0.3em] uppercase mb-12">
-        GenAI Architect • Systems Engineer
-      </div>
-
-      {/* Loading bar */}
-      <div className="w-48 sm:w-64 relative">
-        <div className="h-[1px] bg-border-dim w-full" />
+      {/* Centerpiece title */}
+      <div className="my-auto text-center max-w-3xl mx-auto">
+        <h1
+          ref={nameRef}
+          className="font-serif text-5xl sm:text-7xl md:text-8xl tracking-tight leading-none text-[#FAF9F5]"
+        >
+          ROHIT SHINDE
+        </h1>
         <div
-          ref={barRef}
-          className="absolute top-0 left-0 h-[1px] bg-accent w-full origin-left"
-          style={{ transform: 'scaleX(0)' }}
-        />
-        <div className="flex justify-between mt-3">
-          <span className="font-mono text-[10px] text-text-dim tracking-widest">LOADING</span>
-          <span ref={counterRef} className="font-mono text-[10px] text-accent tracking-widest">
-            000
-          </span>
+          ref={subRef}
+          className="mt-4 font-mono text-xs sm:text-sm tracking-[0.3em] text-[#25C98A] uppercase"
+        >
+          GENAI / FULLSTACK / BUILDER
+        </div>
+      </div>
+
+      {/* Bottom loading telemetry */}
+      <div className="w-full max-w-md mx-auto">
+        <div className="relative h-[1.5px] bg-white/10 w-full overflow-hidden mb-3">
+          <div
+            ref={lineRef}
+            className="absolute inset-y-0 left-0 bg-[#25C98A] w-full origin-left"
+            style={{ transform: 'scaleX(0)' }}
+          />
+        </div>
+        <div className="flex justify-between items-center font-mono text-xs text-[#FAF9F5]/60">
+          <span className="tracking-widest uppercase">INITIALIZING SYSTEM</span>
+          <div className="font-mono text-sm text-[#25C98A] font-semibold tracking-wider">
+            <span ref={counterRef}>00</span>
+            <span className="text-white/40"> / 100</span>
+          </div>
         </div>
       </div>
     </div>

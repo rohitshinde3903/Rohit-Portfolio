@@ -108,7 +108,7 @@ export function AboutMe() {
           >
             <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 border border-border-focus bg-surface-elevated shadow-inner">
               <Image
-                src="/images/rohit-profile.png"
+                src="/images/image.png"
                 alt="Rohit Shinde"
                 fill
                 sizes="128px"

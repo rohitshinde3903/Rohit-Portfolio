@@ -3,32 +3,25 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import { FileDown, ArrowRight, Zap, Sparkles } from 'lucide-react';
-import MagneticButton from '../ui/MagneticButton';
-import HeroSceneCanvas from '../3d/HeroSceneCanvas';
+import { ArrowDown, ArrowUpRight, Sparkles, FileDown } from 'lucide-react';
+import HandwrittenNote from '../ui/HandwrittenNote';
 import { openAndDownloadResume } from '@/lib/utils';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const stats = [
-  { value: '15+', label: 'Startups Shipped' },
-  { value: '+38%', label: 'AI Accuracy Boost' },
-  { value: '-40%', label: 'Latency Reduction' },
-  { value: '9.45', label: 'CGPA Distinction' },
-];
-
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
-  const line1Ref = useRef<HTMLSpanElement>(null);
-  const line2Ref = useRef<HTMLSpanElement>(null);
-  const descRef = useRef<HTMLParagraphElement>(null);
+  const metaRef = useRef<HTMLDivElement>(null);
+  const line1Ref = useRef<HTMLHeadingElement>(null);
+  const line2Ref = useRef<HTMLHeadingElement>(null);
+  const line3Ref = useRef<HTMLHeadingElement>(null);
+  const subRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const orbRing1Ref = useRef<HTMLDivElement>(null);
-  const orbRing2Ref = useRef<HTMLDivElement>(null);
-  const orbCoreRef = useRef<HTMLDivElement>(null);
+  const note1Ref = useRef<HTMLDivElement>(null);
+  const note2Ref = useRef<HTMLDivElement>(null);
+  const note3Ref = useRef<HTMLDivElement>(null);
+  const note4Ref = useRef<HTMLDivElement>(null);
+  const note5Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -37,30 +30,36 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-      // 1. System status pill reveal
+      // 1. Mono metadata stamp
       tl.fromTo(
-        badgeRef.current,
-        { opacity: 0, y: -20, filter: 'blur(6px)' },
-        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.7, delay: 0.1, clearProps: 'filter' }
+        metaRef.current,
+        { opacity: 0, y: -15 },
+        { opacity: 1, y: 0, duration: 0.6, delay: 0.1 }
       )
-        // 2. Headline reveals - line 1 then line 2 with blur-to-sharp
+        // 2. Large Editorial Headline staggered line reveal
         .fromTo(
           line1Ref.current,
-          { y: 50, opacity: 0, filter: 'blur(8px)' },
-          { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.85, ease: 'power4.out', clearProps: 'filter' },
+          { y: 70, opacity: 0, filter: 'blur(8px)' },
+          { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.9, ease: 'power4.out', clearProps: 'filter' },
           '-=0.3'
         )
         .fromTo(
           line2Ref.current,
-          { y: 50, opacity: 0, filter: 'blur(8px)' },
-          { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.85, ease: 'power4.out', clearProps: 'filter' },
-          '-=0.55'
+          { y: 70, opacity: 0, filter: 'blur(8px)' },
+          { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.9, ease: 'power4.out', clearProps: 'filter' },
+          '-=0.65'
         )
-        // 3. Lead description
         .fromTo(
-          descRef.current,
-          { y: 30, opacity: 0, filter: 'blur(4px)' },
-          { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.7, clearProps: 'filter' },
+          line3Ref.current,
+          { y: 70, opacity: 0, filter: 'blur(8px)' },
+          { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.9, ease: 'power4.out', clearProps: 'filter' },
+          '-=0.65'
+        )
+        // 3. Supporting sub-statement
+        .fromTo(
+          subRef.current,
+          { y: 25, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7 },
           '-=0.4'
         )
         // 4. CTAs
@@ -70,48 +69,75 @@ export default function Hero() {
           { y: 0, opacity: 1, duration: 0.6 },
           '-=0.3'
         )
-        // 5. Quantitative telemetry stats strip
+        // 5. Handwritten annotations staggered pop
         .fromTo(
-          statsRef.current ? statsRef.current.children : [],
-          { y: 25, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, stagger: 0.08 },
+          [note1Ref.current, note2Ref.current, note3Ref.current, note4Ref.current, note5Ref.current],
+          { scale: 0.7, opacity: 0, rotate: -10 },
+          { scale: 1, opacity: 1, rotate: (i) => [-4, 6, -5, 4, -3][i], duration: 0.6, stagger: 0.1, ease: 'back.out(1.7)' },
           '-=0.2'
-        )
-        // 6. Scroll cue
-        .fromTo(
-          scrollRef.current,
-          { opacity: 0 },
-          { opacity: 0.7, duration: 0.5 },
-          '-=0.1'
         );
 
-      // Kinetic Motion Graphics: Continuous multi-axis rotation on purple orb rings
-      if (orbRing1Ref.current) {
-        gsap.to(orbRing1Ref.current, {
-          rotation: 360,
-          duration: 20,
-          repeat: -1,
-          ease: 'none',
+      // Subtle Scroll Parallax on words and annotations (never fading out)
+      gsap.to(line1Ref.current, {
+        x: -40,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+
+      gsap.to(line2Ref.current, {
+        x: 35,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.2,
+        },
+      });
+
+      gsap.to(line3Ref.current, {
+        x: -25,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.1,
+        },
+      });
+
+      // Differential drift on annotations
+      if (note1Ref.current) {
+        gsap.to(note1Ref.current, {
+          y: -60,
+          rotate: -12,
+          scrollTrigger: { trigger: containerRef.current, start: 'top top', end: 'bottom top', scrub: 1.5 },
         });
       }
-
-      if (orbRing2Ref.current) {
-        gsap.to(orbRing2Ref.current, {
-          rotation: -360,
-          duration: 28,
-          repeat: -1,
-          ease: 'none',
+      if (note2Ref.current) {
+        gsap.to(note2Ref.current, {
+          y: 70,
+          rotate: 15,
+          scrollTrigger: { trigger: containerRef.current, start: 'top top', end: 'bottom top', scrub: 1.3 },
         });
       }
-
-      if (orbCoreRef.current) {
-        gsap.to(orbCoreRef.current, {
-          scale: 1.15,
-          opacity: 0.85,
-          duration: 3,
-          repeat: -1,
-          yoyo: true,
-          ease: 'sine.inOut',
+      if (note3Ref.current) {
+        gsap.to(note3Ref.current, {
+          y: -40,
+          rotate: -8,
+          scrollTrigger: { trigger: containerRef.current, start: 'top top', end: 'bottom top', scrub: 1.6 },
+        });
+      }
+      if (note4Ref.current) {
+        gsap.to(note4Ref.current, {
+          y: 50,
+          rotate: 10,
+          scrollTrigger: { trigger: containerRef.current, start: 'top top', end: 'bottom top', scrub: 1.4 },
         });
       }
     }, containerRef);
@@ -123,160 +149,129 @@ export default function Hero() {
     <section
       ref={containerRef}
       id="home"
-      className="relative min-h-[92vh] lg:min-h-screen flex flex-col justify-center items-center px-6 pt-24 pb-12 overflow-hidden bg-bg select-none"
+      className="relative min-h-[92vh] lg:min-h-screen flex flex-col justify-between px-6 sm:px-12 pt-28 pb-12 bg-paper text-ink overflow-hidden select-none"
     >
-      {/* 1. Interactive 3D WebGL Particle Nebula Background */}
-      <HeroSceneCanvas />
+      {/* Top Technical Metadata Stamp */}
+      <div
+        ref={metaRef}
+        className="max-w-6xl mx-auto w-full flex justify-between items-center font-mono text-[11px] sm:text-xs text-ink-muted uppercase tracking-widest border-b border-paper-border pb-4"
+      >
+        <span>ROHIT SHINDE / 2026</span>
+        <span className="hidden sm:inline">PUNE, INDIA &bull; GENAI / PRODUCT</span>
+        <span className="text-emerald-deep font-semibold">STATUS // ACTIVE &bull; BUILDING</span>
+      </div>
 
-      {/* 2. Kinetic Purple AI Motion Graphics Element (Orbital Ring Engine) */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none -z-0">
-        {/* Core radial ambient glow */}
-        <div
-          ref={orbCoreRef}
-          className="w-[320px] sm:w-[460px] h-[320px] sm:h-[460px] rounded-full bg-gradient-to-tr from-accent/25 via-accent-violet/20 to-cyan/15 blur-[90px]"
-        />
-
-        {/* Orbit ring 1 (clockwise rotating dashed ring with satellite nodes) */}
-        <div
-          ref={orbRing1Ref}
-          className="absolute inset-0 -m-16 sm:-m-24 border border-dashed border-accent/25 rounded-full"
-        >
-          <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-accent shadow-lg shadow-accent/60" />
-          <div className="absolute -bottom-1.5 left-1/3 w-3 h-3 rounded-full bg-cyan shadow-md shadow-cyan/60" />
+      {/* Main Editorial Headline Composition */}
+      <div className="relative my-auto max-w-5xl mx-auto w-full text-center py-8">
+        
+        {/* Floating Handwritten Annotation 1 (Top Left) */}
+        <div ref={note1Ref} className="absolute -top-4 left-4 sm:left-12 hidden sm:block">
+          <HandwrittenNote rotate={-6} arrow="down">
+            LLMs &amp; RAG
+          </HandwrittenNote>
         </div>
 
-        {/* Orbit ring 2 (counter-clockwise rotating concentric ring) */}
-        <div
-          ref={orbRing2Ref}
-          className="absolute inset-0 -m-32 sm:-m-44 border border-border-dim rounded-full"
-        >
-          <div className="absolute top-1/4 -right-2 w-3.5 h-3.5 rounded-full bg-purple-400 shadow-md shadow-purple-400/50" />
-          <div className="absolute bottom-1/4 -left-2 w-2.5 h-2.5 rounded-full bg-cyan shadow-sm shadow-cyan/50" />
+        {/* Floating Handwritten Annotation 2 (Top Right) */}
+        <div ref={note2Ref} className="absolute -top-2 right-4 sm:right-16 hidden sm:block">
+          <HandwrittenNote rotate={8} arrow="left">
+            AGENTS
+          </HandwrittenNote>
         </div>
-      </div>
 
-      {/* Floating Architectural Coordinate Overlays */}
-      <div className="hidden xl:flex absolute left-8 top-1/2 -translate-y-1/2 z-10 flex-col gap-2 font-mono text-[10px] text-text-dim tracking-widest pointer-events-none select-none border-l border-border-dim pl-4 py-3">
-        <span className="text-accent font-bold">LOC // 18.5204° N</span>
-        <span>GEO // 73.8567° E</span>
-        <span className="text-text-muted">SYS // STABLE</span>
-      </div>
-
-      <div className="hidden xl:flex absolute right-8 top-1/2 -translate-y-1/2 z-10 flex-col items-end gap-2 font-mono text-[10px] text-text-dim tracking-widest pointer-events-none select-none border-r border-border-dim pr-4 py-3">
-        <span className="text-accent font-bold">MODE // PRODUCTION</span>
-        <span>RAG // DETERMINISTIC</span>
-        <span className="text-text-muted">REV // 2026.04</span>
-      </div>
-
-      {/* Main Narrative Stack */}
-      <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center text-center my-auto">
-        {/* Status Pill */}
-        <div
-          ref={badgeRef}
-          className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-bg-card/90 border border-border-lite backdrop-blur-xl mb-6 shadow-sm"
-        >
-          <span className="w-2 h-2 rounded-full bg-emerald animate-pulse" />
-          <span className="font-mono text-[11px] text-text-secondary tracking-widest uppercase">
-            PUNE, IN &bull; GENAI ARCHITECT &bull; v4.2
+        {/* Large Editorial Headline */}
+        <h1 className="font-serif leading-[0.88] tracking-tight uppercase flex flex-col items-center">
+          <span
+            ref={line1Ref}
+            className="block text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[11.5rem] text-ink font-normal"
+          >
+            I TURN
           </span>
-        </div>
-
-        {/* Meticulously Aligned Headline with Fully Visible Gradient */}
-        <h1 className="font-display font-extrabold tracking-tight text-center max-w-4xl mx-auto flex flex-col items-center justify-center mb-6">
-          <div className="overflow-hidden py-1 px-3">
-            <span
-              ref={line1Ref}
-              className="block text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.2rem] text-text-primary leading-[1.1] tracking-tight font-extrabold select-none"
-            >
-              I architect
-            </span>
-          </div>
-          <div className="overflow-hidden py-2 px-3 mt-1 sm:mt-2">
-            <span
-              ref={line2Ref}
-              className="block text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.2rem] leading-[1.15] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-accent via-purple-300 to-cyan italic font-extrabold select-none filter drop-shadow-sm"
-            >
-              intelligent systems.
-            </span>
-          </div>
+          <span
+            ref={line2Ref}
+            className="block text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[11.5rem] text-ink font-normal my-1 sm:my-2"
+          >
+            IDEAS INTO
+          </span>
+          <span
+            ref={line3Ref}
+            className="block text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] xl:text-[11.5rem] text-emerald-deep italic font-serif"
+          >
+            SYSTEMS.
+          </span>
         </h1>
 
-        {/* Lead Narrative Paragraph */}
-        <p
-          ref={descRef}
-          className="max-w-xl mx-auto text-sm sm:text-base text-text-secondary leading-relaxed font-normal mb-8"
-        >
-          Anyone can prompt an AI to spit out a fragile toy wrapper. I architect hardened, production-grade intelligence — fine-tuning custom SLMs, engineering deterministic zero-hallucination RAG, cutting inference latency by 40%, and orchestrating scalable Python backends on Google Cloud.
-        </p>
-
-        {/* Action Buttons */}
-        <div
-          ref={ctaRef}
-          className="flex flex-wrap items-center justify-center gap-3.5 mb-10"
-        >
-          <MagneticButton>
-            <a
-              href="#projects"
-              data-cursor-label="VIEW"
-              className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-xs sm:text-sm text-white bg-accent hover:bg-accent-dark transition-all shadow-md shadow-accent/25 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <Zap className="w-3.5 h-3.5 text-amber-200" />
-              <span>Explore Deployments</span>
-              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-            </a>
-          </MagneticButton>
-
-          <MagneticButton>
-            <a
-              href="#manifesto"
-              data-cursor-label="COMPARE"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-full font-semibold text-xs sm:text-sm text-text-primary bg-bg-card/90 hover:bg-bg-hover border border-border-dim hover:border-border-lite transition-all hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-accent" />
-              <span>The Engineering Reality</span>
-            </a>
-          </MagneticButton>
-
-          <MagneticButton>
-            <button
-              onClick={openAndDownloadResume}
-              data-cursor-label="PDF"
-              className="inline-flex items-center gap-1.5 px-4 py-3 rounded-full font-mono text-xs font-medium text-text-secondary hover:text-text-primary bg-bg-card/50 hover:bg-bg-hover border border-border-dim hover:border-border-lite transition-all hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <FileDown className="w-3.5 h-3.5 text-accent" />
-              <span>CV</span>
-            </button>
-          </MagneticButton>
+        {/* Floating Handwritten Annotation 3 (Bottom Left) */}
+        <div ref={note3Ref} className="absolute bottom-6 left-2 sm:left-8 hidden sm:block">
+          <HandwrittenNote rotate={-5} arrow="up">
+            PRODUCTS
+          </HandwrittenNote>
         </div>
 
-        {/* Telemetry Stats Strip */}
-        <div
-          ref={statsRef}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3.5 w-full max-w-2xl"
+        {/* Floating Handwritten Annotation 4 (Bottom Right) */}
+        <div ref={note4Ref} className="absolute bottom-4 right-2 sm:right-12 hidden sm:block">
+          <HandwrittenNote rotate={6} arrow="left">
+            EXPERIMENTS
+          </HandwrittenNote>
+        </div>
+
+        {/* Floating Handwritten Annotation 5 (Center Floating) */}
+        <div ref={note5Ref} className="inline-block mt-3 sm:mt-4">
+          <HandwrittenNote rotate={-2}>
+            + boundless curiosity
+          </HandwrittenNote>
+        </div>
+
+        {/* Supporting Editorial Subtitle */}
+        <p
+          ref={subRef}
+          className="max-w-xl mx-auto mt-6 text-sm sm:text-base md:text-lg text-ink-muted leading-relaxed font-sans"
         >
-          {stats.map((stat, i) => (
-            <div
-              key={i}
-              className="p-3.5 rounded-2xl bg-bg-card/70 border border-border-dim backdrop-blur-md text-center hover:border-border-accent transition-colors duration-300"
-            >
-              <div className="text-xl sm:text-2xl font-display font-bold text-text-primary">
-                {stat.value}
-              </div>
-              <div className="text-[11px] font-semibold text-text-secondary mt-0.5">
-                {stat.label}
-              </div>
-            </div>
-          ))}
+          GenAI Engineer &bull; Full-Stack Architect &bull; Digital Experience Builder
+        </p>
+
+        {/* Call-to-action actions */}
+        <div
+          ref={ctaRef}
+          className="flex flex-wrap items-center justify-center gap-3.5 mt-8 sm:mt-10"
+        >
+          <a
+            href="#projects"
+            data-cursor-label="WORK"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-emerald-deep hover:bg-dark text-paper text-xs sm:text-sm font-medium tracking-wide transition-all shadow-md hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <span>Explore Selected Work</span>
+            <ArrowDown className="w-3.5 h-3.5" />
+          </a>
+
+          <a
+            href="#intro"
+            data-cursor-label="ABOUT"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-paper-card hover:bg-white border border-paper-border text-ink text-xs sm:text-sm font-medium tracking-wide transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <span>Read Ethos</span>
+            <ArrowUpRight className="w-3.5 h-3.5 text-ink-muted" />
+          </a>
+
+          <button
+            onClick={openAndDownloadResume}
+            data-cursor-label="PDF"
+            className="inline-flex items-center gap-1.5 px-5 py-3.5 rounded-full font-mono text-xs text-ink-muted hover:text-ink bg-paper-card border border-paper-border transition-all"
+          >
+            <FileDown className="w-3.5 h-3.5 text-emerald-deep" />
+            <span>CV</span>
+          </button>
         </div>
       </div>
 
-      {/* Subtle Scroll Cue */}
-      <div
-        ref={scrollRef}
-        className="relative z-10 flex flex-col items-center gap-2 pt-6 text-text-dim text-[11px] font-mono tracking-widest uppercase pointer-events-none opacity-60"
-      >
-        <span>Scroll</span>
-        <div className="w-[1px] h-6 bg-gradient-to-b from-text-dim to-transparent" />
+      {/* Bottom Editorial Coordinates & Scroll Cue */}
+      <div className="max-w-6xl mx-auto w-full flex justify-between items-end border-t border-paper-border pt-4 text-ink-muted font-mono text-[11px]">
+        <div>
+          <span>SCROLL TO EXPLORE</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-accent animate-pulse" />
+          <span>AUTONOMOUS SYSTEMS</span>
+        </div>
       </div>
     </section>
   );

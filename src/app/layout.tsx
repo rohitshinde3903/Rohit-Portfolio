@@ -1,57 +1,35 @@
 'use client';
 
 import '../app/globals.css';
-import { Navbar } from './components/layout/Navbar';
-import SmoothScroll from './components/animations/SmoothScroll';
 import CustomCursor from './components/ui/CustomCursor';
-import Preloader from './components/ui/Preloader';
-import { useState, useEffect } from 'react';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+import React from 'react';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const [loading, setLoading] = useState(true);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const handlePreloaderComplete = () => {
-    setLoading(false);
-    setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 150);
-  };
-
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" className="dark scroll-smooth" suppressHydrationWarning>
       <head>
-        <title>Rohit Shinde — GenAI Architect & Systems Engineer</title>
+        <title>Rohit Shinde — The Game Changer | AI Engineer &amp; Systems Architect</title>
         <meta
           name="description"
-          content="Rohit Shinde — GenAI Engineer building production AI systems. Fine-tuning SLMs, engineering deterministic RAG, and architecting scalable Python backends."
+          content="Rohit Shinde — AI Engineer, Systems Architect, Builder. Transforming ideas into high-throughput systems and autonomous experiences."
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <link rel="icon" href="/images/icon.ico" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800;900&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body className="bg-bg text-text-primary antialiased font-sans" suppressHydrationWarning>
-        <div className="noise-overlay" aria-hidden="true" />
+      <body
+        className="bg-obsidian text-slate-100 font-sans antialiased selection:bg-white selection:text-black overflow-hidden select-none"
+        suppressHydrationWarning
+      >
+        <div className="paper-grain" aria-hidden="true" />
         <CustomCursor />
-
-        {loading && <Preloader onComplete={handlePreloaderComplete} />}
-
-        <SmoothScroll>
-          <div
-            className={`relative z-10 transition-opacity duration-700 min-h-screen flex flex-col ${
-              mounted && !loading ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <Navbar />
-            <div className="flex-1">{children}</div>
-          </div>
-        </SmoothScroll>
+        {children}
       </body>
     </html>
   );
 }
-

@@ -11,7 +11,7 @@ export default function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Only enable on devices with fine pointer (mouse/trackpad), not touch screens
+    // Disable on touch / mobile devices
     const isFinePointer = window.matchMedia('(pointer: fine)').matches;
     if (!isFinePointer) return;
 
@@ -19,14 +19,14 @@ export default function CustomCursor() {
     const ring = ringRef.current;
     if (!dot || !ring) return;
 
-    // Outer ring follows with an ultra-responsive 0.08s spring
-    const ringX = gsap.quickTo(ring, 'x', { duration: 0.08, ease: 'power2.out' });
-    const ringY = gsap.quickTo(ring, 'y', { duration: 0.08, ease: 'power2.out' });
+    // Outer ring follows with smooth spring
+    const ringX = gsap.quickTo(ring, 'x', { duration: 0.1, ease: 'power2.out' });
+    const ringY = gsap.quickTo(ring, 'y', { duration: 0.1, ease: 'power2.out' });
 
     let isFirst = true;
 
     const onMouseMove = (e: MouseEvent) => {
-      // Direct hardware-matched positioning with zero latency
+      // 0ms delay hardware-accurate central dot
       dot.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
 
       if (isFirst) {
@@ -47,7 +47,15 @@ export default function CustomCursor() {
       if (target) {
         setIsHovering(true);
         const customLabel = target.getAttribute('data-cursor-label');
-        setLabel(customLabel || '');
+        if (customLabel) {
+          setLabel(customLabel);
+        } else if (target.tagName.toLowerCase() === 'a' && target.getAttribute('target') === '_blank') {
+          setLabel('OPEN');
+        } else if (target.closest('#projects')) {
+          setLabel('VIEW');
+        } else {
+          setLabel('');
+        }
       } else {
         setIsHovering(false);
         setLabel('');
@@ -69,33 +77,33 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Zero-latency precision pointer dot (exact pixel alignment) */}
+      {/* Central pointer dot with mix-blend-mode */}
       <div
         ref={dotRef}
-        className={`fixed top-0 left-0 pointer-events-none z-[9999] rounded-full transition-opacity duration-150 ${
+        className={`fixed top-0 left-0 pointer-events-none z-[9999] rounded-full transition-opacity duration-150 mix-blend-difference ${
           isVisible ? 'opacity-100' : 'opacity-0'
         } ${
-          isHovering ? 'w-2 h-2 bg-accent shadow-sm shadow-accent' : 'w-1.5 h-1.5 bg-white'
+          isHovering ? 'w-2 h-2 bg-[#25C98A]' : 'w-1.5 h-1.5 bg-white'
         }`}
         style={{ willChange: 'transform' }}
       />
 
-      {/* Smooth, low-latency magnetic aura ring with high-contrast label */}
+      {/* Trailing magnetic ring with contextual pill label */}
       <div
         ref={ringRef}
         className={`fixed top-0 left-0 pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-150 ${
           isVisible ? 'opacity-100' : 'opacity-0'
         } ${
           isHovering && label
-            ? 'w-20 h-20 bg-accent/20 border border-accent/70 backdrop-blur-[2px] flex items-center justify-center shadow-lg shadow-accent/30'
+            ? 'w-20 h-20 bg-[#0B3D2E]/90 border border-[#25C98A] text-[#FAF9F5] shadow-xl flex items-center justify-center scale-100'
             : isHovering
-            ? 'w-11 h-11 border border-accent/60 bg-accent/15'
-            : 'w-7 h-7 border border-white/30 bg-white/[0.02]'
+            ? 'w-12 h-12 border-2 border-[#25C98A] bg-[#25C98A]/10 scale-110'
+            : 'w-8 h-8 border border-[#111111]/30 dark:border-white/30 scale-100'
         }`}
         style={{ willChange: 'transform' }}
       >
         {label && isHovering && (
-          <span className="font-mono text-[9px] text-white font-bold tracking-widest uppercase select-none drop-shadow">
+          <span className="font-mono text-[9px] text-[#25C98A] font-bold tracking-widest uppercase select-none">
             {label}
           </span>
         )}

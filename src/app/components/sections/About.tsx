@@ -89,7 +89,7 @@ export default function About() {
         <div ref={leftRef} className="lg:col-span-5 space-y-6">
           <div className="flex items-center gap-5 p-5 rounded-2xl bg-bg-card/80 border border-border-dim backdrop-blur-sm">
             <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden shrink-0 border border-border-lite">
-              <Image src="/images/rohit-profile.png" alt="Rohit Shinde" fill sizes="112px" priority className="object-cover" />
+              <Image src="/images/image.png" alt="Rohit Shinde" fill sizes="112px" priority className="object-cover" />
             </div>
             <div>
               <h3 className="font-display font-bold text-xl text-text-primary">Rohit Shinde</h3>
