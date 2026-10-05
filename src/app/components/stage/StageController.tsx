@@ -44,6 +44,8 @@ export default function StageController() {
 
   const [aboutCardStep, setAboutCardStep] = useState(1);
   const [projectModalIndex, setProjectModalIndex] = useState<number | null>(null);
+  const [experienceStep, setExperienceStep] = useState(1);
+  const TOTAL_EXPERIENCE_STEPS = portfolioData.experience.length;
 
   const goToStage = useCallback((targetIndex: number) => {
     if (targetIndex >= 0 && targetIndex < TOTAL_STAGES) {
@@ -54,18 +56,27 @@ export default function StageController() {
       if (targetIndex !== 3) {
         setProjectModalIndex(null);
       }
+      if (targetIndex === 4) {
+        // If coming backwards from Contact (5), show all 5 experiences; otherwise start at 1
+        setExperienceStep((prev) => (activeStage > 4 ? TOTAL_EXPERIENCE_STEPS : 1));
+      }
       setActiveStage(targetIndex);
       isThrottled.current = true;
       setTimeout(() => {
         isThrottled.current = false;
       }, 750);
     }
-  }, [activeStage]);
+  }, [activeStage, TOTAL_EXPERIENCE_STEPS]);
 
   const handleSkipProjects = useCallback(() => {
     setProjectModalIndex(null);
     goToStage(4);
   }, [goToStage]);
+
+  const handleSkipExperience = useCallback(() => {
+    setExperienceStep(TOTAL_EXPERIENCE_STEPS);
+    goToStage(5);
+  }, [goToStage, TOTAL_EXPERIENCE_STEPS]);
 
   const nextStage = useCallback(() => {
     if (isThrottled.current) return;
@@ -102,10 +113,17 @@ export default function StageController() {
         setProjectModalIndex(null);
         goToStage(4);
       }
+    } else if (activeStage === 4 && experienceStep < TOTAL_EXPERIENCE_STEPS) {
+      // On Experience stage, reveal experience nodes 1 -> 2 -> 3 -> 4 -> 5 one by one on scroll
+      setExperienceStep((prev) => Math.min(TOTAL_EXPERIENCE_STEPS, prev + 1));
+      isThrottled.current = true;
+      setTimeout(() => {
+        isThrottled.current = false;
+      }, 450);
     } else if (activeStage < TOTAL_STAGES - 1) {
       goToStage(activeStage + 1);
     }
-  }, [activeStage, aboutCardStep, projectModalIndex, goToStage]);
+  }, [activeStage, aboutCardStep, projectModalIndex, experienceStep, TOTAL_EXPERIENCE_STEPS, goToStage]);
 
   const prevStage = useCallback(() => {
     if (isThrottled.current) return;
@@ -136,13 +154,23 @@ export default function StageController() {
         // On Projects overview, scroll up returns to About
         goToStage(2);
       }
+    } else if (activeStage === 4 && experienceStep > 1) {
+      // On Experience stage, step backwards through experiences: 5 -> 4 -> 3 -> 2 -> 1
+      setExperienceStep((prev) => Math.max(1, prev - 1));
+      isThrottled.current = true;
+      setTimeout(() => {
+        isThrottled.current = false;
+      }, 450);
+    } else if (activeStage === 4 && experienceStep === 1) {
+      // On Experience stage at milestone 1, scroll up returns to Projects
+      goToStage(3);
     } else if (activeStage > 0) {
       if (activeStage === 1) {
         setTriggerLandingExit(false);
       }
       goToStage(activeStage - 1);
     }
-  }, [activeStage, aboutCardStep, projectModalIndex, goToStage]);
+  }, [activeStage, aboutCardStep, projectModalIndex, experienceStep, goToStage]);
 
   const handleLandingAdvance = useCallback(() => {
     setActiveStage(1);
@@ -301,7 +329,13 @@ export default function StageController() {
 
       {/* Stage 4: Experience Panel (Turns Black again, Connected Graph) */}
       <PanelWrapper stageIndex={4} activeStage={activeStage} id="stage-experience">
-        <ExperiencePanel onAdvance={() => goToStage(5)} isActive={activeStage === 4} />
+        <ExperiencePanel
+          onAdvance={() => goToStage(5)}
+          isActive={activeStage === 4}
+          experienceStep={experienceStep}
+          onSetExperienceStep={(step) => setExperienceStep(step)}
+          onSkip={handleSkipExperience}
+        />
       </PanelWrapper>
 
       {/* Stage 5: Contact Panel (LET'S BUILD SOMETHING DIFFERENT) */}

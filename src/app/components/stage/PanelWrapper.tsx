@@ -52,6 +52,10 @@ export default function PanelWrapper({
     panelOpacity = isCurrent ? 1 : isPast ? pastOpacity : 1;
   }
 
+  // When stageIndex > 0 (Hero, About, Projects, Experience, Contact), StageNavbar is fixed at the top (h-20 = 80px).
+  // The section content starts directly from the bottom edge of the navbar.
+  const navbarSpacingClass = stageIndex > 0 ? 'pt-20' : '';
+
   return (
     <motion.section
       id={id}
@@ -70,9 +74,11 @@ export default function PanelWrapper({
         zIndex,
         pointerEvents: isCurrent ? 'auto' : 'none',
       }}
-      className={`fixed inset-0 w-full h-[100dvh] overflow-hidden flex flex-col justify-center shadow-2xl ${
+      className={`fixed inset-0 w-full h-[100dvh] overflow-hidden flex flex-col ${
+        stageIndex === 0 ? 'justify-center' : 'justify-start'
+      } shadow-2xl ${
         isLight ? 'bg-canvasLight text-zinc-950' : 'bg-obsidian text-slate-100'
-      } ${className}`}
+      } ${navbarSpacingClass} ${className}`}
     >
       {/* Subtle top edge border shadow simulating physical card edge on rising panels */}
       {stageIndex > 1 && (

@@ -35,8 +35,8 @@ export default function AboutPanel({
   ];
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-between px-4 sm:px-10 md:px-16 pt-20 sm:pt-24 pb-6 sm:pb-8 select-none overflow-y-auto bg-obsidian text-slate-100">
-      <div className="max-w-7xl mx-auto w-full my-auto space-y-6 sm:space-y-7">
+    <div className="relative w-full h-full flex-1 flex flex-col justify-between px-4 sm:px-10 md:px-16 pt-5 sm:pt-7 pb-12 select-none overflow-y-auto bg-obsidian text-slate-100">
+      <div className="max-w-7xl mx-auto w-full space-y-6 sm:space-y-7">
         {/* Top HUD Telemetry Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3.5 sm:pb-4 border-b border-zinc-800/80 gap-3">
           <div className="flex items-center gap-3 font-mono text-xs tracking-widest text-cyan-400 uppercase">

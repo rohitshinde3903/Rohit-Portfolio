@@ -24,7 +24,7 @@ export default function ProjectsPanel({
   const selectedProjects = projects.slice(0, 4);
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-between px-4 sm:px-10 md:px-16 pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 select-none overflow-y-auto bg-canvasLight text-zinc-950 transition-colors duration-500">
+    <div className="relative w-full h-full flex-1 flex flex-col justify-between px-4 sm:px-10 md:px-16 pt-5 sm:pt-7 pb-12 sm:pb-16 select-none overflow-y-auto bg-canvasLight text-zinc-950 transition-colors duration-500">
       <div className="max-w-7xl mx-auto w-full space-y-5 sm:space-y-7">
         {/* Header with High-Contrast Inverted Brutalist Style & SKIP Button */}
         <div className="flex flex-col md:flex-row md:items-end justify-between pb-4 sm:pb-5 border-b-2 border-zinc-950 gap-4">

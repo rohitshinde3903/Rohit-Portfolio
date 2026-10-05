@@ -25,10 +25,7 @@ export default function HeroPanel({ onAdvance, isActive }: HeroPanelProps) {
   ];
 
   return (
-    <div className="relative w-full h-[100dvh] flex flex-col justify-between items-center select-none overflow-hidden bg-obsidian text-slate-100 pt-16 sm:pt-20 pb-2">
-      {/* Sleek Announcement Pill (positioned compactly below StageNavbar) */}
-      
-
+    <div className="relative w-full h-full flex-1 flex flex-col justify-between items-center select-none overflow-hidden bg-obsidian text-slate-100 pb-2">
       {/* Main Unified Hero Stage Canvas (Strictly fits 100% within viewport) */}
       <section className="relative w-full flex-1 max-w-7xl mx-auto flex items-center justify-center min-h-0 px-2 sm:px-6 overflow-hidden">
         {/* Subtle Background Glow behind portrait */}
@@ -41,7 +38,7 @@ export default function HeroPanel({ onAdvance, isActive }: HeroPanelProps) {
           initial={{ opacity: 0, x: -40 }}
           animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
           transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute left-3 sm:left-8 md:left-14 lg:left-20 top-[10%] sm:top-[12%] md:top-[14%] font-display font-black text-[clamp(3.8rem,9vw,8rem)] leading-none tracking-tighter text-white pointer-events-none select-none z-10 drop-shadow-[0_10px_25px_rgba(0,0,0,0.85)]"
+          className="absolute left-3 sm:left-8 md:left-14 lg:left-20 top-[6%] sm:top-[8%] md:top-[10%] font-display font-black text-[clamp(3.8rem,9vw,8rem)] leading-none tracking-tighter text-white pointer-events-none select-none z-10 drop-shadow-[0_10px_25px_rgba(0,0,0,0.85)]"
         >
           I
         </motion.h1>
@@ -51,7 +48,7 @@ export default function HeroPanel({ onAdvance, isActive }: HeroPanelProps) {
           initial={{ opacity: 0, x: 40 }}
           animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
           transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute right-3 sm:right-8 md:right-14 lg:right-20 top-[10%] sm:top-[12%] md:top-[14%] font-display font-black text-[clamp(3.8rem,9vw,8rem)] leading-none tracking-tighter text-white pointer-events-none select-none z-10 drop-shadow-[0_10px_25px_rgba(0,0,0,0.85)]"
+          className="absolute right-3 sm:right-8 md:right-14 lg:right-20 top-[6%] sm:top-[8%] md:top-[10%] font-display font-black text-[clamp(3.8rem,9vw,8rem)] leading-none tracking-tighter text-white pointer-events-none select-none z-10 drop-shadow-[0_10px_25px_rgba(0,0,0,0.85)]"
         >
           AM
         </motion.h1>

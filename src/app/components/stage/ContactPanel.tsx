@@ -24,9 +24,9 @@ export default function ContactPanel({ onBackToTop, isActive }: ContactPanelProp
   return (
     <footer
       id="contact"
-      className="relative w-full h-full flex flex-col justify-between px-6 sm:px-12 md:px-16 pt-24 pb-8 select-none overflow-y-auto bg-zinc-950 border-t border-zinc-800 text-slate-100"
+      className="relative w-full h-full flex-1 flex flex-col justify-between px-6 sm:px-12 md:px-16 pt-6 sm:pt-8 pb-12 select-none overflow-y-auto bg-zinc-950 text-slate-100"
     >
-      <div className="max-w-7xl mx-auto w-full my-auto space-y-12">
+      <div className="max-w-7xl mx-auto w-full space-y-10">
         {/* Main Grid matching prototype */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pb-12 border-b border-zinc-800/80">
           {/* Left Column: Heading & Call to action */}

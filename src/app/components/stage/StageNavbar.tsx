@@ -37,7 +37,7 @@ export default function StageNavbar({ activeStage, onSelectStage }: StageNavbarP
                 : 'bg-obsidian/85 border-white/10 text-slate-100'
             }`}
           >
-            <div className="max-w-7xl mx-auto px-6 h-18 sm:h-20 flex items-center justify-between">
+            <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
               {/* Brand Name from prototype */}
               <button
                 onClick={() => onSelectStage(1)}
