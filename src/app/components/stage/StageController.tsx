@@ -224,7 +224,12 @@ export default function StageController() {
 
       {/* Stage 2: About Panel (IN PROCESS SINCE 2003) */}
       <PanelWrapper stageIndex={2} activeStage={activeStage} id="stage-about">
-        <AboutPanel onAdvance={() => goToStage(3)} isActive={activeStage === 2} />
+        <AboutPanel
+          onAdvance={() => goToStage(3)}
+          isActive={activeStage === 2}
+          cardStep={aboutCardStep}
+          onSetCardStep={(step) => setAboutCardStep(step)}
+        />
       </PanelWrapper>
 
       {/* Stage 3: Projects Panel (Turns White as in Sketch, 4 Selected Works) */}
