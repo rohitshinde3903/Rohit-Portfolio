@@ -36,3 +36,6 @@ Thumbs.db
 
 # Large video assets
 *.mp4
+
+# Temporary generator images
+ChatGPT Image*.png

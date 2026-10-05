@@ -4,57 +4,13 @@ import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-import { ArrowRight, Github, ExternalLink } from 'lucide-react';
+import { ArrowRight, Github, ExternalLink, Smartphone } from 'lucide-react';
 import MagneticButton from './ui/MagneticButton';
+import { projectsData } from '@/data/projects';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const projects = [
-  {
-    title: 'EduAI SLM Fine-Tuning & Knowledge RAG',
-    category: 'Small Language Models & Vector RAG',
-    year: '2025 – 2026',
-    metric: '+38% Accuracy • -42% Hallucinations',
-    description: 'Fine-tuned Gemma 3B using LoRA, QLoRA, and progressive layer unfreezing for specialized educational curricula. Coupled with a LlamaIndex and ChromaDB vector retrieval pipeline, achieving high factual accuracy while reducing inference latency by ~40% via vLLM serving.',
-    tags: ['PyTorch', 'Gemma 3B', 'LlamaIndex', 'ChromaDB', 'vLLM', 'FastAPI', 'GCP'],
-    image: '/images/evs.png',
-    githubUrl: 'https://github.com/rohitshinde3903',
-    liveUrl: 'https://rohiit.is-a.dev',
-  },
-  {
-    title: 'Multi-Modal Educational Content Pipeline',
-    category: 'Generative Vision & Diffusion',
-    year: '2024',
-    metric: 'Automated Diagram Synthesis',
-    description: 'Architected an end-to-end multimodal generative pipeline generating structured educational diagrams and lesson visuals directly from textual lecture prompts using Stable Diffusion SDXL, ControlNet, and custom LoRA adapters exposed via FastAPI microservices.',
-    tags: ['Stable Diffusion SDXL', 'ControlNet', 'LoRA', 'ComfyUI', 'FastAPI', 'Python'],
-    image: '/images/profo.png',
-    githubUrl: 'https://github.com/rohitshinde3903',
-    liveUrl: 'https://rohiit.is-a.dev',
-  },
-  {
-    title: 'AI-Powered Electronic Voting Platform',
-    category: 'Computer Vision & Security',
-    year: '2024 – 2025',
-    metric: 'Biometric Facial Verification & 2FA',
-    description: 'A tamper-proof electronic voting platform engineered for high-integrity elections, featuring real-time facial biometric authentication, dual-factor security (2FA), real-time election telemetry, and anomaly-detection ML models.',
-    tags: ['Python', 'Django', 'FastAPI', 'OpenCV', 'Facial Biometrics', '2FA'],
-    image: '/images/evs.png',
-    githubUrl: 'https://github.com/rohitshinde3903/EVS-Flask.git',
-    liveUrl: 'https://rohiit.is-a.dev',
-  },
-  {
-    title: 'PROFO: Profile & Portfolio Management Engine',
-    category: 'Full-Stack Web Architecture',
-    year: '2024',
-    metric: 'Consolidated Online Presence',
-    description: 'A full-stack developer profile management application allowing engineers to consolidate their resume, GitHub, and verified projects into a single authenticated, privacy-controlled public link.',
-    tags: ['Django', 'Python', 'REST APIs', 'Authentication', 'Tailwind CSS'],
-    image: '/images/profo.png',
-    githubUrl: 'https://github.com/rohitshinde3903/PROFO.git',
-    liveUrl: 'https://profoui.onrender.com/',
-  },
-];
+const projects = projectsData;
 
 export default function InsightsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -225,7 +181,7 @@ export default function InsightsSection() {
 
               {/* Architectural Tags */}
               <div className="flex flex-wrap gap-2 mb-8">
-                {project.tags.map((tag, tIdx) => (
+                {(project.tags || project.tech || []).map((tag, tIdx) => (
                   <span
                     key={tIdx}
                     className="px-2.5 py-1 rounded-md bg-surface-elevated text-xs font-mono text-secondary border border-border-subtle"
@@ -264,11 +220,20 @@ export default function InsightsSection() {
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      data-cursor-label="LIVE"
+                      data-cursor-label={project.isPlayStore ? 'APP' : 'LIVE'}
                       className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-accent text-primary text-xs font-semibold hover:bg-accent-violet transition-all shadow-md shadow-accent/20"
                     >
-                      <span>View Live</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      {project.isPlayStore ? (
+                        <>
+                          <Smartphone className="w-3.5 h-3.5" />
+                          <span>Google Play</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>View Live</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </>
+                      )}
                     </a>
                   </MagneticButton>
                 )}
