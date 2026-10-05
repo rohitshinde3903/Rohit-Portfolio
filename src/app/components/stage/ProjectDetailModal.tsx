@@ -45,7 +45,7 @@ export default function ProjectDetailModal({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
-        className="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 md:p-8 select-none"
+        className="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-md flex items-center justify-center p-2 xs:p-3 sm:p-6 md:p-8 select-none"
         onClick={onClose}
       >
         <motion.div
@@ -55,50 +55,50 @@ export default function ProjectDetailModal({
           exit={{ scale: 0.94, y: 25, opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           data-modal-scroll="true"
-          className="bg-white text-zinc-950 max-w-3xl w-full border-4 border-zinc-950 shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] p-5 sm:p-7 max-h-[88vh] overflow-y-auto overscroll-y-contain scroll-smooth relative flex flex-col justify-between [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-black/20 [&::-webkit-scrollbar-track]:bg-transparent"
+          className="bg-white text-zinc-950 max-w-3xl w-full border-2 sm:border-4 border-zinc-950 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] p-3.5 sm:p-7 max-h-[92vh] sm:max-h-[88vh] overflow-y-auto overscroll-y-contain scroll-smooth relative flex flex-col justify-between [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-black/20 [&::-webkit-scrollbar-track]:bg-transparent"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Top Header Bar */}
-          <div className="flex items-center justify-between pb-3 border-b-2 border-zinc-950 mb-4 gap-2">
-            <div className="flex items-center gap-2 font-mono text-xs text-blue-600 font-bold">
-              <span className="px-2.5 py-0.5 bg-blue-50 border border-blue-200 rounded">
+          <div className="flex flex-wrap sm:flex-nowrap items-center justify-between pb-2.5 sm:pb-3 border-b-2 border-zinc-950 mb-3 sm:mb-4 gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 font-mono text-[11px] sm:text-xs text-blue-600 font-bold">
+              <span className="px-2 sm:px-2.5 py-0.5 bg-blue-50 border border-blue-200 rounded">
                 PROJECT [{project.number} / 0{totalProjects}]
               </span>
               <span>·</span>
-              <span className="uppercase text-zinc-600">{project.category}</span>
+              <span className="uppercase text-zinc-600 text-[10px] sm:text-xs">{project.category}</span>
             </div>
 
             {/* Right Hand Side: SKIP & Close Button */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 ml-auto sm:ml-0">
               <button
                 onClick={onSkip}
                 data-cursor-label="SKIP"
-                className="px-3.5 py-1.5 bg-zinc-950 hover:bg-blue-600 text-white font-mono text-xs font-bold uppercase transition-colors cursor-pointer shadow-sm"
+                className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 bg-zinc-950 hover:bg-blue-600 text-white font-mono text-[10px] sm:text-xs font-bold uppercase transition-colors cursor-pointer shadow-sm"
               >
                 SKIP TOUR [→]
               </button>
               <button
                 onClick={onClose}
-                className="p-1.5 bg-zinc-100 hover:bg-zinc-200 text-black border border-zinc-950 transition-colors cursor-pointer"
+                className="p-1 sm:p-1.5 bg-zinc-100 hover:bg-zinc-200 text-black border border-zinc-950 transition-colors cursor-pointer"
                 aria-label="Close modal"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
             </div>
           </div>
 
           {/* Title & Role */}
           <div className="mb-3">
-            <h3 className="font-display text-2xl sm:text-3xl font-black text-zinc-950 leading-tight">
+            <h3 className="font-display text-xl sm:text-2xl md:text-3xl font-black text-zinc-950 leading-tight">
               {project.title}
             </h3>
-            <p className="font-mono text-xs text-zinc-500 mt-1 uppercase">
+            <p className="font-mono text-[11px] sm:text-xs text-zinc-500 mt-1 uppercase">
               ROLE: <span className="text-zinc-900 font-bold">{project.role}</span>
             </p>
           </div>
 
           {/* Project Image */}
-          <div className="h-44 sm:h-56 w-full overflow-hidden mb-4 border-2 border-zinc-950 bg-zinc-100 relative shadow-inner">
+          <div className="h-36 xs:h-44 sm:h-56 w-full overflow-hidden mb-3.5 sm:mb-4 border-2 border-zinc-950 bg-zinc-100 relative shadow-inner">
             <img
               src={project.image}
               alt={project.title}
@@ -184,33 +184,36 @@ export default function ProjectDetailModal({
           </div>
 
           {/* Stepper Navigation Footer */}
-          <div className="pt-3 border-t-2 border-zinc-950 flex items-center justify-between font-mono text-xs">
+          <div className="pt-3 border-t-2 border-zinc-950 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 font-mono text-xs">
             <button
               disabled={modalIndex === 0}
               onClick={onPrev}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-zinc-950 hover:bg-zinc-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed font-bold uppercase cursor-pointer"
+              className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 border border-zinc-950 hover:bg-zinc-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed font-bold uppercase text-[11px] sm:text-xs cursor-pointer"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
-              <span>Prev Project</span>
+              <span>Prev</span>
             </button>
 
-            <div className="flex items-center gap-2 text-zinc-500 text-[11px]">
+            <div className="flex items-center gap-1.5 text-zinc-500 text-[10px] sm:text-[11px] order-last sm:order-none w-full sm:w-auto justify-center">
               <span>Project {modalIndex + 1} of {totalProjects}</span>
               <span className="hidden sm:inline">• Scroll &darr; to advance</span>
             </div>
 
             <button
               onClick={onNext}
-              className={`inline-flex items-center gap-1.5 px-4 py-1.5 font-bold uppercase transition-colors shadow-sm text-white cursor-pointer ${
+              className={`inline-flex items-center gap-1 px-3 sm:px-4 py-1.5 font-bold uppercase transition-colors shadow-sm text-white text-[11px] sm:text-xs cursor-pointer ${
                 modalIndex === totalProjects - 1
                   ? 'bg-emerald-600 hover:bg-emerald-700'
                   : 'bg-zinc-950 hover:bg-blue-600'
               }`}
             >
-              <span>
+              <span className="hidden xs:inline">
                 {modalIndex === totalProjects - 1
                   ? 'Finish Tour (To Experience) →'
                   : 'Next Project (Scroll ↓)'}
+              </span>
+              <span className="inline xs:hidden">
+                {modalIndex === totalProjects - 1 ? 'Finish →' : 'Next ↓'}
               </span>
               <ChevronRight className="w-3.5 h-3.5" />
             </button>

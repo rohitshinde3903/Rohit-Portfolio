@@ -37,14 +37,14 @@ export default function StageNavbar({ activeStage, onSelectStage }: StageNavbarP
                 : 'bg-obsidian/85 border-white/10 text-slate-100'
             }`}
           >
-            <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div className="max-w-7xl mx-auto px-3.5 sm:px-6 h-20 flex items-center justify-between gap-2">
               {/* Brand Name from prototype */}
               <button
                 onClick={() => onSelectStage(1)}
                 data-cursor-label="ROHIT"
-                className="group flex items-center gap-3 text-left cursor-pointer"
+                className="group flex items-center gap-2 sm:gap-3 text-left cursor-pointer shrink-0"
               >
-                <span className={`font-display font-black text-2xl tracking-tighter transition-colors ${
+                <span className={`font-display font-black text-xl sm:text-2xl tracking-tighter transition-colors ${
                   isLightMode ? 'text-zinc-950 group-hover:text-blue-600' : 'text-white group-hover:text-cyan-400'
                 }`}>
                   ROHIT<span className={isLightMode ? 'text-zinc-400' : 'text-white/40'}>.</span>
@@ -83,7 +83,7 @@ export default function StageNavbar({ activeStage, onSelectStage }: StageNavbarP
               </nav>
 
               {/* Status indicator / CTA Button */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 sm:gap-4 shrink-0">
                 <div className={`hidden lg:flex items-center gap-2 text-xs font-mono px-3 py-1.5 rounded-full border ${
                   isLightMode
                     ? 'text-zinc-700 bg-zinc-200/80 border-zinc-300'
@@ -109,7 +109,7 @@ export default function StageNavbar({ activeStage, onSelectStage }: StageNavbarP
                 <button
                   onClick={() => onSelectStage(5)}
                   data-cursor-label="CONTACT"
-                  className={`px-4 sm:px-5 py-2 text-xs uppercase font-mono font-semibold tracking-wider rounded transition-all shadow-sm cursor-pointer ${
+                  className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[11px] sm:text-xs uppercase font-mono font-semibold tracking-wider rounded transition-all shadow-sm cursor-pointer ${
                     isLightMode
                       ? 'bg-blue-600 text-white hover:bg-blue-700'
                       : 'bg-white text-black hover:bg-cyan-400 hover:scale-[1.02]'
@@ -121,7 +121,7 @@ export default function StageNavbar({ activeStage, onSelectStage }: StageNavbarP
                 {/* Mobile hamburger */}
                 <button
                   onClick={() => setMobileMenuOpen(true)}
-                  className={`p-2 rounded md:hidden ${
+                  className={`p-1.5 sm:p-2 rounded md:hidden cursor-pointer ${
                     isLightMode ? 'text-black hover:bg-black/5' : 'text-white hover:bg-white/10'
                   }`}
                   aria-label="Toggle menu"
@@ -141,7 +141,7 @@ export default function StageNavbar({ activeStage, onSelectStage }: StageNavbarP
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-[9999] bg-obsidian text-slate-100 p-8 flex flex-col justify-between"
+            className="fixed inset-0 z-[9999] bg-obsidian text-slate-100 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto"
           >
             <div className="flex justify-between items-center border-b border-white/10 pb-4">
               <span className="font-mono text-xs text-cyan-400 tracking-widest uppercase">
@@ -155,13 +155,13 @@ export default function StageNavbar({ activeStage, onSelectStage }: StageNavbarP
               </button>
             </div>
 
-            <div className="space-y-4 my-auto">
+            <div className="space-y-3 sm:space-y-4 my-auto py-6">
               <button
                 onClick={() => {
                   onSelectStage(1);
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-left font-display font-bold text-4xl text-white hover:text-cyan-400 py-2 border-b border-white/10"
+                className="block w-full text-left font-display font-bold text-2xl sm:text-4xl text-white hover:text-cyan-400 py-2 border-b border-white/10"
               >
                 HERO
               </button>
@@ -172,7 +172,7 @@ export default function StageNavbar({ activeStage, onSelectStage }: StageNavbarP
                     onSelectStage(item.stage);
                     setMobileMenuOpen(false);
                   }}
-                  className="block w-full text-left font-display font-bold text-4xl text-white hover:text-cyan-400 py-2 border-b border-white/10"
+                  className="block w-full text-left font-display font-bold text-2xl sm:text-4xl text-white hover:text-cyan-400 py-2 border-b border-white/10"
                 >
                   {item.name}
                 </button>
