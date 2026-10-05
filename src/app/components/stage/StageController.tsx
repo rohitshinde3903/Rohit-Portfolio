@@ -42,31 +42,73 @@ export default function StageController() {
     }
   }, []);
 
-  const [aboutCardStep, setAboutCardStep] = useState(1);
   const [projectModalIndex, setProjectModalIndex] = useState<number | null>(null);
-  const [experienceStep, setExperienceStep] = useState(1);
-  const TOTAL_EXPERIENCE_STEPS = portfolioData.experience.length;
+
+  // Helper to find the active scrollable container
+  const getActiveScrollContainer = useCallback((): HTMLElement | null => {
+    // 1. If ProjectDetailModal is open, modal scroll container takes precedence
+    if (projectModalIndex !== null) {
+      const modalScroll = document.querySelector('[data-modal-scroll="true"]');
+      if (modalScroll instanceof HTMLElement) return modalScroll;
+    }
+
+    // 2. Stages 0 (Landing) and 1 (Hero) do not scroll internally
+    if (activeStage <= 1) return null;
+
+    const panelIds = [
+      'stage-landing',
+      'stage-hero',
+      'stage-about',
+      'stage-projects',
+      'stage-experience',
+      'stage-contact',
+    ];
+    const activePanelId = panelIds[activeStage];
+    if (!activePanelId) return null;
+
+    const panelEl = document.getElementById(activePanelId);
+    if (!panelEl) return null;
+
+    // Look for element with data-section-scroll="true" inside active panel
+    const scrollEl = panelEl.querySelector('[data-section-scroll="true"]');
+    if (scrollEl instanceof HTMLElement) return scrollEl;
+
+    return null;
+  }, [activeStage, projectModalIndex]);
 
   const goToStage = useCallback((targetIndex: number) => {
     if (targetIndex >= 0 && targetIndex < TOTAL_STAGES) {
-      if (targetIndex === 2) {
-        // If coming backwards from Projects (3), show all 4 cards; otherwise start from card 1
-        setAboutCardStep((prev) => (activeStage > 2 ? 4 : 1));
-      }
       if (targetIndex !== 3) {
         setProjectModalIndex(null);
       }
-      if (targetIndex === 4) {
-        // If coming backwards from Contact (5), show all 5 experiences; otherwise start at 1
-        setExperienceStep((prev) => (activeStage > 4 ? TOTAL_EXPERIENCE_STEPS : 1));
-      }
       setActiveStage(targetIndex);
       isThrottled.current = true;
+
+      // Reset scroll position of target section to top
+      const panelIds = [
+        'stage-landing',
+        'stage-hero',
+        'stage-about',
+        'stage-projects',
+        'stage-experience',
+        'stage-contact',
+      ];
+      const targetPanelId = panelIds[targetIndex];
+      if (targetPanelId) {
+        setTimeout(() => {
+          const panelEl = document.getElementById(targetPanelId);
+          const scrollEl = panelEl?.querySelector('[data-section-scroll="true"]');
+          if (scrollEl instanceof HTMLElement) {
+            scrollEl.scrollTop = 0;
+          }
+        }, 80);
+      }
+
       setTimeout(() => {
         isThrottled.current = false;
-      }, 750);
+      }, 700);
     }
-  }, [activeStage, TOTAL_EXPERIENCE_STEPS]);
+  }, []);
 
   const handleSkipProjects = useCallback(() => {
     setProjectModalIndex(null);
@@ -74,9 +116,8 @@ export default function StageController() {
   }, [goToStage]);
 
   const handleSkipExperience = useCallback(() => {
-    setExperienceStep(TOTAL_EXPERIENCE_STEPS);
     goToStage(5);
-  }, [goToStage, TOTAL_EXPERIENCE_STEPS]);
+  }, [goToStage]);
 
   const nextStage = useCallback(() => {
     if (isThrottled.current) return;
@@ -85,92 +126,21 @@ export default function StageController() {
       // Trigger the 3D scattering & fly-through camera transition on LandingPanel
       isThrottled.current = true;
       setTriggerLandingExit(true);
-    } else if (activeStage === 2 && aboutCardStep < 4) {
-      // On About stage, reveal cards 1 -> 2 -> 3 -> 4 one by one on scroll
-      setAboutCardStep((prev) => Math.min(4, prev + 1));
-      isThrottled.current = true;
-      setTimeout(() => {
-        isThrottled.current = false;
-      }, 450);
-    } else if (activeStage === 3) {
-      // On Projects stage, open and step through project modals one by one
-      if (projectModalIndex === null) {
-        // First scroll on Projects page opens modal for Project 01
-        setProjectModalIndex(0);
-        isThrottled.current = true;
-        setTimeout(() => {
-          isThrottled.current = false;
-        }, 450);
-      } else if (projectModalIndex < 3) {
-        // Scroll steps to next project (01 -> 02 -> 03 -> 04)
-        setProjectModalIndex((prev) => (prev !== null ? prev + 1 : 0));
-        isThrottled.current = true;
-        setTimeout(() => {
-          isThrottled.current = false;
-        }, 450);
-      } else {
-        // After project 04 is finished, advance to Experience
-        setProjectModalIndex(null);
-        goToStage(4);
-      }
-    } else if (activeStage === 4 && experienceStep < TOTAL_EXPERIENCE_STEPS) {
-      // On Experience stage, reveal experience nodes 1 -> 2 -> 3 -> 4 -> 5 one by one on scroll
-      setExperienceStep((prev) => Math.min(TOTAL_EXPERIENCE_STEPS, prev + 1));
-      isThrottled.current = true;
-      setTimeout(() => {
-        isThrottled.current = false;
-      }, 450);
     } else if (activeStage < TOTAL_STAGES - 1) {
       goToStage(activeStage + 1);
     }
-  }, [activeStage, aboutCardStep, projectModalIndex, experienceStep, TOTAL_EXPERIENCE_STEPS, goToStage]);
+  }, [activeStage, goToStage]);
 
   const prevStage = useCallback(() => {
     if (isThrottled.current) return;
 
-    if (activeStage === 2 && aboutCardStep > 1) {
-      // On About stage, step backwards through cards: 4 -> 3 -> 2 -> 1
-      setAboutCardStep((prev) => Math.max(1, prev - 1));
-      isThrottled.current = true;
-      setTimeout(() => {
-        isThrottled.current = false;
-      }, 450);
-    } else if (activeStage === 3) {
-      // On Projects stage, step backwards through project modals
-      if (projectModalIndex !== null && projectModalIndex > 0) {
-        setProjectModalIndex((prev) => (prev !== null ? prev - 1 : null));
-        isThrottled.current = true;
-        setTimeout(() => {
-          isThrottled.current = false;
-        }, 450);
-      } else if (projectModalIndex === 0) {
-        // From project 01, close modal back to Projects overview
-        setProjectModalIndex(null);
-        isThrottled.current = true;
-        setTimeout(() => {
-          isThrottled.current = false;
-        }, 450);
-      } else {
-        // On Projects overview, scroll up returns to About
-        goToStage(2);
-      }
-    } else if (activeStage === 4 && experienceStep > 1) {
-      // On Experience stage, step backwards through experiences: 5 -> 4 -> 3 -> 2 -> 1
-      setExperienceStep((prev) => Math.max(1, prev - 1));
-      isThrottled.current = true;
-      setTimeout(() => {
-        isThrottled.current = false;
-      }, 450);
-    } else if (activeStage === 4 && experienceStep === 1) {
-      // On Experience stage at milestone 1, scroll up returns to Projects
-      goToStage(3);
-    } else if (activeStage > 0) {
+    if (activeStage > 0) {
       if (activeStage === 1) {
         setTriggerLandingExit(false);
       }
       goToStage(activeStage - 1);
     }
-  }, [activeStage, aboutCardStep, projectModalIndex, experienceStep, goToStage]);
+  }, [activeStage, goToStage]);
 
   const handleLandingAdvance = useCallback(() => {
     setActiveStage(1);
@@ -180,11 +150,42 @@ export default function StageController() {
     }, 600);
   }, []);
 
-  // Wheel listener with throttle
+  // Wheel listener with intelligent in-section scroll boundary detection
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) < 25) return;
+      if (Math.abs(e.deltaY) < 15) return;
       if (isThrottled.current) return;
+
+      // When ProjectDetailModal is open, let the user scroll inside modal naturally
+      if (projectModalIndex !== null) {
+        return;
+      }
+
+      const scrollContainer = getActiveScrollContainer();
+
+      if (scrollContainer) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+        const maxScroll = scrollHeight - clientHeight;
+
+        // If the section has room to scroll internally
+        if (maxScroll > 15) {
+          if (e.deltaY > 0) {
+            // Scrolling DOWN: only advance if already at bottom of section
+            const isAtBottom = scrollTop >= maxScroll - 20;
+            if (!isAtBottom) {
+              // Allow normal in-section scroll
+              return;
+            }
+          } else {
+            // Scrolling UP: only go back if already at top of section
+            const isAtTop = scrollTop <= 20;
+            if (!isAtTop) {
+              // Allow normal in-section scroll
+              return;
+            }
+          }
+        }
+      }
 
       if (e.deltaY > 0) {
         nextStage();
@@ -195,9 +196,9 @@ export default function StageController() {
 
     window.addEventListener('wheel', handleWheel, { passive: true });
     return () => window.removeEventListener('wheel', handleWheel);
-  }, [nextStage, prevStage]);
+  }, [nextStage, prevStage, getActiveScrollContainer, projectModalIndex]);
 
-  // Touch swipe listener for mobile devices
+  // Touch swipe listener for mobile devices with in-section boundary check
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY.current = e.touches[0].clientY;
@@ -205,10 +206,31 @@ export default function StageController() {
 
     const handleTouchEnd = (e: TouchEvent) => {
       if (isThrottled.current) return;
+      if (projectModalIndex !== null) return;
+
       const touchEndY = e.changedTouches[0].clientY;
       const deltaY = touchStartY.current - touchEndY;
 
       if (Math.abs(deltaY) > 50) {
+        const scrollContainer = getActiveScrollContainer();
+
+        if (scrollContainer) {
+          const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+          const maxScroll = scrollHeight - clientHeight;
+
+          if (maxScroll > 15) {
+            if (deltaY > 0) {
+              // Swiping UP (scrolling down): only advance if at bottom
+              const isAtBottom = scrollTop >= maxScroll - 25;
+              if (!isAtBottom) return;
+            } else {
+              // Swiping DOWN (scrolling up): only advance if at top
+              const isAtTop = scrollTop <= 25;
+              if (!isAtTop) return;
+            }
+          }
+        }
+
         if (deltaY > 0) {
           nextStage();
         } else {
@@ -223,16 +245,34 @@ export default function StageController() {
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [nextStage, prevStage]);
+  }, [nextStage, prevStage, getActiveScrollContainer, projectModalIndex]);
 
-  // Keyboard navigation
+  // Keyboard navigation with in-section scroll boundary check
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isThrottled.current) return;
 
-      if (e.key === 'Escape' && activeStage === 3 && projectModalIndex !== null) {
+      if (e.key === 'Escape' && projectModalIndex !== null) {
         setProjectModalIndex(null);
         return;
+      }
+
+      if (projectModalIndex !== null) return;
+
+      const scrollContainer = getActiveScrollContainer();
+      if (scrollContainer) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+        const maxScroll = scrollHeight - clientHeight;
+
+        if (maxScroll > 15) {
+          if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+            const isAtBottom = scrollTop >= maxScroll - 25;
+            if (!isAtBottom) return;
+          } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+            const isAtTop = scrollTop <= 25;
+            if (!isAtTop) return;
+          }
+        }
       }
 
       if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
@@ -246,7 +286,7 @@ export default function StageController() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [nextStage, prevStage, activeStage, projectModalIndex]);
+  }, [nextStage, prevStage, getActiveScrollContainer, projectModalIndex]);
 
   const isLightMode = activeStage === 3;
 
@@ -311,8 +351,6 @@ export default function StageController() {
         <AboutPanel
           onAdvance={() => goToStage(3)}
           isActive={activeStage === 2}
-          cardStep={aboutCardStep}
-          onSetCardStep={(step) => setAboutCardStep(step)}
         />
       </PanelWrapper>
 
@@ -332,8 +370,6 @@ export default function StageController() {
         <ExperiencePanel
           onAdvance={() => goToStage(5)}
           isActive={activeStage === 4}
-          experienceStep={experienceStep}
-          onSetExperienceStep={(step) => setExperienceStep(step)}
           onSkip={handleSkipExperience}
         />
       </PanelWrapper>

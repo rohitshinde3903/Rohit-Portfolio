@@ -24,7 +24,8 @@ export default function ContactPanel({ onBackToTop, isActive }: ContactPanelProp
   return (
     <footer
       id="contact"
-      className="relative w-full h-full flex-1 flex flex-col justify-between px-6 sm:px-12 md:px-16 pt-6 sm:pt-8 pb-12 select-none overflow-y-auto bg-zinc-950 text-slate-100"
+      data-section-scroll="true"
+      className="relative w-full h-full flex-1 flex flex-col justify-between px-6 sm:px-12 md:px-16 pt-6 sm:pt-8 pb-12 overflow-y-auto overscroll-y-contain scroll-smooth bg-zinc-950 text-slate-100 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-track]:bg-transparent"
     >
       <div className="max-w-7xl mx-auto w-full space-y-10">
         {/* Main Grid matching prototype */}

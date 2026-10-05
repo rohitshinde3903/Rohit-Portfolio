@@ -7,15 +7,11 @@ import { portfolioData } from '@/app/data/portfolioData';
 interface AboutPanelProps {
   onAdvance: () => void;
   isActive: boolean;
-  cardStep?: number;
-  onSetCardStep?: (step: number) => void;
 }
 
 export default function AboutPanel({
   onAdvance,
   isActive,
-  cardStep = 1,
-  onSetCardStep,
 }: AboutPanelProps) {
   const { about } = portfolioData;
 
@@ -35,7 +31,10 @@ export default function AboutPanel({
   ];
 
   return (
-    <div className="relative w-full h-full flex-1 flex flex-col justify-between px-4 sm:px-10 md:px-16 pt-5 sm:pt-7 pb-12 select-none overflow-y-auto bg-obsidian text-slate-100">
+    <div
+      data-section-scroll="true"
+      className="relative w-full h-full flex-1 flex flex-col justify-between px-4 sm:px-10 md:px-16 pt-5 sm:pt-7 pb-12 overflow-y-auto overscroll-y-contain scroll-smooth bg-obsidian text-slate-100 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-white/20 [&::-webkit-scrollbar-track]:bg-transparent"
+    >
       <div className="max-w-7xl mx-auto w-full space-y-6 sm:space-y-7">
         {/* Top HUD Telemetry Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3.5 sm:pb-4 border-b border-zinc-800/80 gap-3">
@@ -121,139 +120,54 @@ export default function AboutPanel({
           </p>
         </motion.div>
 
-        {/* 4 Core Pillars Header & Interactive Progression Cue */}
+        {/* 4 Core Pillars Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 font-mono pt-1">
           <div className="flex items-center gap-2 text-xs">
             <span className="text-cyan-400 font-bold uppercase tracking-wider">// CORE DIRECTIVES</span>
             <span className="text-zinc-600">•</span>
             <span className="text-white font-semibold">
-              CARD {cardStep} OF 4 REVEALED
+              4 OPERATING PILLARS
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-[11px] font-mono">
-              {cardStep < 4 ? (
-                <span className="text-zinc-400">
-                  Scroll down to reveal card [0{cardStep + 1}] &darr;
-                </span>
-              ) : (
-                <span className="text-emerald-400 font-semibold animate-pulse">
-                  All 4 cards finished • Scroll down to move to Projects &darr;
-                </span>
-              )}
-            </span>
-
-            {/* Clickable Card Step Pills */}
-            <div className="flex items-center gap-1.5">
-              {[1, 2, 3, 4].map((step) => (
-                <button
-                  key={step}
-                  onClick={() => onSetCardStep?.(step)}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    step <= cardStep
-                      ? step === cardStep
-                        ? 'w-7 bg-cyan-400 shadow-[0_0_10px_#00F0FF]'
-                        : 'w-3.5 bg-zinc-400 hover:bg-zinc-300'
-                      : 'w-2 bg-zinc-800 hover:bg-zinc-700'
-                  }`}
-                  aria-label={`Jump to card ${step}`}
-                />
-              ))}
-            </div>
-          </div>
+          <span className="text-[11px] font-mono text-zinc-400">
+            Scroll down to review full profile &amp; tech arsenal &darr;
+          </span>
         </div>
 
-        {/* 4 Core Pillars Grid (Revealed one by one on scroll) */}
+        {/* 4 Core Pillars Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 font-mono">
           {about.traits?.map((trait, idx) => {
-            const isRevealed = idx + 1 <= cardStep;
-            const isCurrent = idx + 1 === cardStep;
-
-            if (isRevealed) {
-              return (
-                <motion.div
-                  key={trait.number}
-                  initial={{ opacity: 0, y: 35, scale: 0.94 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  onClick={() => onSetCardStep?.(idx + 1)}
-                  className={`p-4 sm:p-5 rounded-lg border transition-all duration-300 relative overflow-hidden shadow-xl cursor-pointer ${
-                    isCurrent
-                      ? 'bg-zinc-900 border-cyan-400 shadow-[0_0_20px_rgba(0,240,255,0.25)] ring-1 ring-cyan-400/40'
-                      : 'bg-zinc-950/80 border-zinc-800 hover:border-zinc-700'
-                  }`}
-                >
-                  {/* Subtle active glow flare */}
-                  {isCurrent && (
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/15 rounded-full blur-xl pointer-events-none" />
-                  )}
-
-                  <div className="flex items-center justify-between mb-2">
-                    <span className={`text-xs font-bold ${isCurrent ? 'text-cyan-400' : 'text-zinc-400'}`}>
-                      [{trait.number}]
-                    </span>
-                    <span
-                      className={`text-[9px] uppercase tracking-wider px-2 py-0.5 rounded border font-bold ${
-                        isCurrent
-                          ? 'text-cyan-300 bg-cyan-400/20 border-cyan-400/40 shadow-sm'
-                          : 'text-zinc-400 bg-zinc-900 border-zinc-800'
-                      }`}
-                    >
-                      {isCurrent ? '● ACTIVE' : trait.tag}
-                    </span>
-                  </div>
-
-                  <div
-                    className={`text-sm sm:text-base font-bold uppercase tracking-tight ${
-                      isCurrent ? 'text-white' : 'text-zinc-200'
-                    }`}
-                  >
-                    {trait.title}
-                  </div>
-
-                  <div className="text-xs text-zinc-400 mt-2 leading-relaxed font-sans font-light">
-                    {trait.description}
-                  </div>
-                </motion.div>
-              );
-            }
-
-            // Locked slot for unrevealed cards
             return (
               <motion.div
                 key={trait.number}
-                initial={{ opacity: 0.35 }}
-                animate={{ opacity: 0.5 }}
-                onClick={() => onSetCardStep?.(idx + 1)}
-                className="p-4 sm:p-5 rounded-lg border border-dashed border-zinc-800/80 bg-zinc-950/30 hover:border-zinc-700 hover:opacity-75 transition-all duration-300 relative overflow-hidden flex flex-col justify-between cursor-pointer group"
-                title="Scroll down or click to reveal"
+                initial={{ opacity: 0, y: 25 }}
+                animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
+                transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                className="p-4 sm:p-5 rounded-lg border bg-zinc-950/80 border-zinc-800 hover:border-cyan-400/60 hover:bg-zinc-900/90 transition-all duration-300 relative overflow-hidden shadow-xl group"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-mono text-zinc-600 font-bold">
+                  <span className="text-xs font-bold text-cyan-400">
                     [{trait.number}]
                   </span>
-                  <span className="text-[9px] uppercase tracking-wider text-zinc-500 bg-zinc-900/60 px-1.5 py-0.5 rounded border border-zinc-800/60 font-mono">
-                    LOCKED
+                  <span className="text-[9px] uppercase tracking-wider px-2 py-0.5 rounded border font-bold text-zinc-400 bg-zinc-900 border-zinc-800 group-hover:border-cyan-400/40 group-hover:text-cyan-300 transition-colors">
+                    {trait.tag}
                   </span>
                 </div>
 
-                <div className="my-auto py-2 text-center">
-                  <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider group-hover:text-cyan-400 transition-colors">
-                    &darr; Scroll to Reveal
-                  </div>
-                  <div className="text-[11px] font-sans text-zinc-600 mt-1">
-                    {trait.title}
-                  </div>
+                <div className="text-sm sm:text-base font-bold uppercase tracking-tight text-white group-hover:text-cyan-300 transition-colors">
+                  {trait.title}
                 </div>
 
-                <div className="h-1 w-full bg-zinc-900 rounded-full overflow-hidden mt-2">
-                  <div className="h-full bg-zinc-800 w-0" />
+                <div className="text-xs text-zinc-400 mt-2 leading-relaxed font-sans font-light">
+                  {trait.description}
                 </div>
               </motion.div>
             );
           })}
         </div>
+
+
 
         {/* Bottom Hardware Telemetry & Weaponry Strip */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center pt-2">

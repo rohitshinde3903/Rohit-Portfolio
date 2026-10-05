@@ -54,7 +54,8 @@ export default function ProjectDetailModal({
           animate={{ scale: 1, y: 0, opacity: 1 }}
           exit={{ scale: 0.94, y: 25, opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="bg-white text-zinc-950 max-w-3xl w-full border-4 border-zinc-950 shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] p-5 sm:p-7 max-h-[88vh] overflow-y-auto relative flex flex-col justify-between"
+          data-modal-scroll="true"
+          className="bg-white text-zinc-950 max-w-3xl w-full border-4 border-zinc-950 shadow-[16px_16px_0px_0px_rgba(0,0,0,1)] p-5 sm:p-7 max-h-[88vh] overflow-y-auto overscroll-y-contain scroll-smooth relative flex flex-col justify-between [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-black/20 [&::-webkit-scrollbar-track]:bg-transparent"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Top Header Bar */}
