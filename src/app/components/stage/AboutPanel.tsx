@@ -172,18 +172,18 @@ export default function AboutPanel({
         {/* Bottom Hardware Telemetry & Weaponry Strip */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center pt-2">
           {/* Key Metrics */}
-          <div className="lg:col-span-5 grid grid-cols-3 gap-2.5 font-mono text-center">
-            <div className="bg-zinc-950/80 p-2.5 sm:p-3 rounded border border-zinc-800">
-              <div className="text-lg sm:text-xl font-black text-cyan-400">9.45</div>
-              <div className="text-[9px] text-zinc-400 uppercase tracking-widest mt-0.5">CGPA Distinction</div>
+          <div className="lg:col-span-5 grid grid-cols-3 gap-1.5 sm:gap-2.5 font-mono text-center">
+            <div className="bg-zinc-950/80 p-2 sm:p-3 rounded border border-zinc-800">
+              <div className="text-base sm:text-xl font-black text-cyan-400">9.45</div>
+              <div className="text-[8px] sm:text-[9px] text-zinc-400 uppercase tracking-wider mt-0.5">CGPA Distinction</div>
             </div>
-            <div className="bg-zinc-950/80 p-2.5 sm:p-3 rounded border border-zinc-800">
-              <div className="text-lg sm:text-xl font-black text-white">&lt;50ms</div>
-              <div className="text-[9px] text-zinc-400 uppercase tracking-widest mt-0.5">Inference TTFT</div>
+            <div className="bg-zinc-950/80 p-2 sm:p-3 rounded border border-zinc-800">
+              <div className="text-base sm:text-xl font-black text-white">&lt;50ms</div>
+              <div className="text-[8px] sm:text-[9px] text-zinc-400 uppercase tracking-wider mt-0.5">Inference TTFT</div>
             </div>
-            <div className="bg-zinc-950/80 p-2.5 sm:p-3 rounded border border-zinc-800">
-              <div className="text-lg sm:text-xl font-black text-emerald-400">100%</div>
-              <div className="text-[9px] text-zinc-400 uppercase tracking-widest mt-0.5">Completion Rate</div>
+            <div className="bg-zinc-950/80 p-2 sm:p-3 rounded border border-zinc-800">
+              <div className="text-base sm:text-xl font-black text-emerald-400">100%</div>
+              <div className="text-[8px] sm:text-[9px] text-zinc-400 uppercase tracking-wider mt-0.5">Completion Rate</div>
             </div>
           </div>
 
@@ -195,7 +195,7 @@ export default function AboutPanel({
             {techStack.map((tech) => (
               <span
                 key={tech}
-                className="px-2 py-0.5 text-[11px] font-mono bg-zinc-900/90 text-zinc-300 border border-zinc-800 rounded hover:border-cyan-400/60 hover:text-white transition-colors"
+                className="px-2 py-0.5 text-[10px] sm:text-[11px] font-mono bg-zinc-900/90 text-zinc-300 border border-zinc-800 rounded hover:border-cyan-400/60 hover:text-white transition-colors"
               >
                 {tech}
               </span>
@@ -205,7 +205,7 @@ export default function AboutPanel({
       </div>
 
       {/* Bottom Nav / Advance Button */}
-      <div className="max-w-7xl mx-auto w-full flex justify-between items-center pt-3 border-t border-zinc-800/80 shrink-0">
+      <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row justify-between items-center gap-2 pt-3 border-t border-zinc-800/80 shrink-0">
         <span className="font-mono text-xs text-zinc-400 uppercase tracking-wider">
           02 // OPERATING DIRECTIVE
         </span>

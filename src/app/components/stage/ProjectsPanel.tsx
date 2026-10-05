@@ -26,7 +26,7 @@ export default function ProjectsPanel({
   return (
     <div
       data-section-scroll="true"
-      className="relative w-full h-full flex-1 flex flex-col justify-between px-4 sm:px-10 md:px-16 pt-5 sm:pt-7 pb-12 sm:pb-16 overflow-y-auto overscroll-y-contain scroll-smooth bg-canvasLight text-zinc-950 transition-colors duration-500 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-black/20 [&::-webkit-scrollbar-track]:bg-transparent"
+      className="relative w-full h-full flex-1 flex flex-col justify-between px-3.5 sm:px-10 md:px-16 pt-4 sm:pt-7 pb-12 sm:pb-16 overflow-y-auto overscroll-y-contain scroll-smooth bg-canvasLight text-zinc-950 transition-colors duration-500 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-black/20 [&::-webkit-scrollbar-track]:bg-transparent"
     >
       <div className="max-w-7xl mx-auto w-full space-y-5 sm:space-y-7">
         {/* Header with High-Contrast Inverted Brutalist Style & SKIP Button */}
@@ -36,7 +36,7 @@ export default function ProjectsPanel({
               <span className="w-2.5 h-2.5 bg-black inline-block" />
               <span>/PROJECTS — SELECTED ONLY (04)</span>
             </div>
-            <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-zinc-950 mt-1.5">
+            <h2 className="font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-zinc-950 mt-1.5">
               ENGINEERED ARTIFACTS
             </h2>
             <p className="text-xs sm:text-sm font-mono text-zinc-600 mt-1 max-w-xl">
@@ -49,10 +49,10 @@ export default function ProjectsPanel({
             <button
               onClick={onSkip || onAdvance}
               data-cursor-label="SKIP"
-              className="group inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 border-2 border-zinc-950 bg-white hover:bg-zinc-950 hover:text-white font-mono text-xs font-black uppercase tracking-wider transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none cursor-pointer"
+              className="group inline-flex items-center gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 border-2 border-zinc-950 bg-white hover:bg-zinc-950 hover:text-white font-mono text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none cursor-pointer"
             >
               <span>SKIP TO EXPERIENCE</span>
-              <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transform group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
@@ -61,15 +61,15 @@ export default function ProjectsPanel({
         <div className="flex items-center justify-between font-mono text-[11px] text-zinc-600 border-b border-zinc-300 pb-2">
           <span className="flex items-center gap-2 font-bold text-zinc-950 uppercase">
             <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-            INTERACTION: SCROLL DOWN TO INSPECT DOSSIERS ONE-BY-ONE (01 → 04)
+            CLICK ANY CARD TO INSPECT FULL DOSSIER
           </span>
           <span className="hidden sm:inline text-zinc-500 uppercase">
-            OR CLICK ANY CARD TO OPEN DIRECTLY
+            04 SELECTED PRODUCTION PLATFORMS
           </span>
         </div>
 
         {/* 4 Projects Grid with Brutalist Hard Shadows */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-7">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-6 lg:gap-7">
           {selectedProjects.map((project, idx) => (
             <motion.article
               key={project.id}
@@ -78,7 +78,7 @@ export default function ProjectsPanel({
               transition={{ duration: 0.65, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
               onClick={() => onSetModalIndex?.(idx)}
               data-cursor-label="INSPECT"
-              className={`group border-2 border-zinc-950 bg-white p-4 sm:p-6 flex flex-col justify-between hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 cursor-pointer ${
+              className={`group border-2 border-zinc-950 bg-white p-3.5 sm:p-6 flex flex-col justify-between hover:translate-y-[-4px] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 cursor-pointer ${
                 idx % 2 === 1 ? 'md:mt-2' : ''
               }`}
             >

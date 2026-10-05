@@ -38,7 +38,7 @@ export default function HeroPanel({ onAdvance, isActive }: HeroPanelProps) {
           initial={{ opacity: 0, x: -40 }}
           animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 }}
           transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute left-3 sm:left-8 md:left-14 lg:left-20 top-[6%] sm:top-[8%] md:top-[10%] font-display font-black text-[clamp(3.8rem,9vw,8rem)] leading-none tracking-tighter text-white pointer-events-none select-none z-10 drop-shadow-[0_10px_25px_rgba(0,0,0,0.85)]"
+          className="absolute left-2 xs:left-4 sm:left-8 md:left-14 lg:left-20 top-[4%] sm:top-[6%] md:top-[8%] font-display font-black text-[clamp(2.5rem,7vw,7rem)] leading-none tracking-tighter text-white pointer-events-none select-none z-10 drop-shadow-[0_10px_25px_rgba(0,0,0,0.85)]"
         >
           I
         </motion.h1>
@@ -48,7 +48,7 @@ export default function HeroPanel({ onAdvance, isActive }: HeroPanelProps) {
           initial={{ opacity: 0, x: 40 }}
           animate={isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
           transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute right-3 sm:right-8 md:right-14 lg:right-20 top-[6%] sm:top-[8%] md:top-[10%] font-display font-black text-[clamp(3.8rem,9vw,8rem)] leading-none tracking-tighter text-white pointer-events-none select-none z-10 drop-shadow-[0_10px_25px_rgba(0,0,0,0.85)]"
+          className="absolute right-2 xs:right-4 sm:right-8 md:right-14 lg:right-20 top-[4%] sm:top-[6%] md:top-[8%] font-display font-black text-[clamp(2.5rem,7vw,7rem)] leading-none tracking-tighter text-white pointer-events-none select-none z-10 drop-shadow-[0_10px_25px_rgba(0,0,0,0.85)]"
         >
           AM
         </motion.h1>
@@ -87,7 +87,7 @@ export default function HeroPanel({ onAdvance, isActive }: HeroPanelProps) {
             transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
           }}
           transition={{ duration: 1.1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-25 flex flex-col items-center justify-end h-full max-h-[78vh] group cursor-pointer pointer-events-auto select-none"
+          className="relative z-25 flex flex-col items-center justify-end h-full max-h-[76vh] group cursor-pointer pointer-events-auto select-none"
           data-cursor-label="ROHIT"
         >
           {/* Dynamic Cyan Aura on Hover */}
@@ -96,22 +96,17 @@ export default function HeroPanel({ onAdvance, isActive }: HeroPanelProps) {
           <img
             src={hero.portraitImage}
             alt="Rohit Shinde — Full portrait cutout"
-            className="h-[48vh] sm:h-[54vh] md:h-[68vh] lg:h-[78vh] max-h-[580px] w-auto object-contain object-bottom pointer-events-auto drop-shadow-[0_25px_50px_rgba(0,0,0,0.95)] group-hover:drop-shadow-[0_35px_65px_rgba(0,240,255,0.35)] transition-all duration-500"
+            className="h-[44vh] xs:h-[48vh] sm:h-[54vh] md:h-[66vh] lg:h-[74vh] max-h-[560px] w-auto object-contain object-bottom pointer-events-auto drop-shadow-[0_25px_50px_rgba(0,0,0,0.95)] group-hover:drop-shadow-[0_35px_65px_rgba(0,240,255,0.35)] transition-all duration-500"
           />
-
-          {/* Metadata badge below portrait */}
-          <div className="mt-1 text-[9px] sm:text-[10px] font-mono tracking-widest text-zinc-400 group-hover:text-cyan-300 bg-black/90 group-hover:border-cyan-400/40 px-3 py-0.5 rounded-full border border-white/15 uppercase z-30 shadow-lg transition-colors duration-300">
-            LOC: PUNE, INDIA (IST) // THE GAME CHANGER
-          </div>
         </motion.div>
 
         {/* Lower Tier: "DIFFERENT" Across Bottom (100% visible on screen, scaled cleanly) */}
-        <div className="absolute bottom-[2%] sm:bottom-[3%] md:bottom-[4%] inset-x-0 w-full text-center z-30 pointer-events-none select-none px-2">
+        <div className="absolute bottom-[1.5%] sm:bottom-[2.5%] md:bottom-[3%] inset-x-0 w-full text-center z-30 pointer-events-none select-none px-2">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="font-display font-black text-[clamp(2.5rem,7.5vw,7rem)] tracking-tight sm:tracking-normal md:tracking-wide text-white uppercase leading-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.95)]"
+            className="font-display font-black text-[clamp(2rem,7vw,6.5rem)] tracking-tight sm:tracking-normal md:tracking-wide text-white uppercase leading-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.95)]"
           >
             DIFFERENT
           </motion.h1>

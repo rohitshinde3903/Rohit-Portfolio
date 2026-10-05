@@ -255,7 +255,7 @@ export default function LandingPanel({ onAdvance, isActive, triggerExit = false 
                 transformOrigin: '50% 50%',
                 willChange: 'transform, opacity, filter',
               }}
-              className="text-6xl sm:text-8xl md:text-9xl lg:text-[11rem] xl:text-[13rem] font-display font-black text-white tracking-tighter leading-none mx-0.5 sm:mx-1 drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]"
+              className="text-4xl xs:text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] xl:text-[12rem] font-display font-black text-white tracking-tighter leading-none mx-0.5 sm:mx-1 drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]"
             >
               {item.char}
             </motion.span>
@@ -315,7 +315,7 @@ export default function LandingPanel({ onAdvance, isActive, triggerExit = false 
                 transformOrigin: '50% 50%',
                 willChange: 'transform, opacity, filter',
               }}
-              className="text-6xl sm:text-8xl md:text-9xl lg:text-[11rem] xl:text-[13rem] font-display font-black text-white tracking-tighter leading-none mx-0.5 sm:mx-1 drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]"
+              className="text-4xl xs:text-5xl sm:text-7xl md:text-8xl lg:text-[10rem] xl:text-[12rem] font-display font-black text-white tracking-tighter leading-none mx-0.5 sm:mx-1 drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]"
             >
               {item.char}
             </motion.span>
