@@ -9,6 +9,8 @@ import ProjectsPanel from './ProjectsPanel';
 import ExperiencePanel from './ExperiencePanel';
 import ContactPanel from './ContactPanel';
 import StageNavbar from './StageNavbar';
+import ProjectDetailModal from './ProjectDetailModal';
+import { portfolioData } from '@/app/data/portfolioData';
 
 const STAGE_NAMES = ['LANDING', 'HERO', 'ABOUT', 'PROJECTS', 'EXPERIENCE', 'CONTACT'];
 const TOTAL_STAGES = 6;
@@ -306,6 +308,38 @@ export default function StageController() {
       <PanelWrapper stageIndex={5} activeStage={activeStage} id="stage-contact">
         <ContactPanel onBackToTop={() => goToStage(0)} isActive={activeStage === 5} />
       </PanelWrapper>
+
+      {/* Global Root-Level Project Detail Modal (Rendered above StageNavbar with z-[99999]) */}
+      <ProjectDetailModal
+        project={
+          projectModalIndex !== null && projectModalIndex >= 0 && projectModalIndex < 4
+            ? portfolioData.projects[projectModalIndex]
+            : null
+        }
+        modalIndex={projectModalIndex}
+        totalProjects={4}
+        onNext={() => {
+          if (projectModalIndex !== null) {
+            if (projectModalIndex < 3) {
+              setProjectModalIndex(projectModalIndex + 1);
+            } else {
+              setProjectModalIndex(null);
+              goToStage(4);
+            }
+          }
+        }}
+        onPrev={() => {
+          if (projectModalIndex !== null) {
+            if (projectModalIndex > 0) {
+              setProjectModalIndex(projectModalIndex - 1);
+            } else {
+              setProjectModalIndex(null);
+            }
+          }
+        }}
+        onClose={() => setProjectModalIndex(null)}
+        onSkip={handleSkipProjects}
+      />
     </div>
   );
 }
