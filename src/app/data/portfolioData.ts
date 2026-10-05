@@ -115,9 +115,8 @@ export const portfolioData = {
         'Dynamic Provider Hot-Switching',
         'Zero-Downtime Architecture',
       ],
-      image: 'https://rohiit.is-a.dev/images/vidyaai-web.jpg',
+      image: '/images/vidyaai-web.jpg',
       link: 'https://vidyaai.eduaihub.in/login',
-      github: 'https://github.com/rohitshinde3903',
       role: 'GenAI Engineer & Systems Architect',
     },
 
@@ -139,9 +138,8 @@ export const portfolioData = {
       metrics: [
         '100% Offline Edge Inference',
       ],
-      image: 'https://rohiit.is-a.dev/images/vidyaai-app.jpg',
+      image: '/images/vidyaai-app.jpg',
       link: 'https://play.google.com/store/apps/details?id=com.Vidya_AI.app&hl=en_IN',
-      github: 'https://github.com/rohitshinde3903',
       role: 'Edge AI Engineer',
     },
 
@@ -165,9 +163,8 @@ export const portfolioData = {
         'Razorpay Integrated',
         'Tamper-Proof Certificates',
       ],
-      image: 'https://rohiit.is-a.dev/images/stones-academy.jpg',
+      image: '/images/stones-academy.jpg',
       link: 'https://stonesacademy.vercel.app/',
-      github: 'https://github.com/rohitshinde3903',
       role: 'Full Stack Engineer & Product Architect',
     },
 
@@ -191,9 +188,8 @@ export const portfolioData = {
         '+38% Accuracy',
         '-42% Hallucinations',
       ],
-      image: 'https://rohiit.is-a.dev/images/evs.png',
+      image: '/images/evs.png',
       link: 'https://github.com/rohitshinde3903',
-      github: 'https://github.com/rohitshinde3903',
       role: 'SLM Engineer & AI Researcher',
     },
 
@@ -220,7 +216,6 @@ export const portfolioData = {
       ],
       image: 'https://rohiit.is-a.dev/images/evs.png',
       link: 'https://github.com/rohitshinde3903/EVS-Flask.git',
-      github: 'https://github.com/rohitshinde3903/EVS-Flask.git',
       role: 'AI & Security Engineer',
     },
 
@@ -244,7 +239,6 @@ export const portfolioData = {
       ],
       image: 'https://rohiit.is-a.dev/images/profo.png',
       link: 'https://profoui.onrender.com/',
-      github: 'https://github.com/rohitshinde3903/PROFO.git',
       role: 'Full Stack Developer & Product Architect',
     },
   ] as ProjectItem[],

@@ -41,12 +41,16 @@ export default function StageController() {
   }, []);
 
   const [aboutCardStep, setAboutCardStep] = useState(1);
+  const [projectModalIndex, setProjectModalIndex] = useState<number | null>(null);
 
   const goToStage = useCallback((targetIndex: number) => {
     if (targetIndex >= 0 && targetIndex < TOTAL_STAGES) {
       if (targetIndex === 2) {
         // If coming backwards from Projects (3), show all 4 cards; otherwise start from card 1
         setAboutCardStep((prev) => (activeStage > 2 ? 4 : 1));
+      }
+      if (targetIndex !== 3) {
+        setProjectModalIndex(null);
       }
       setActiveStage(targetIndex);
       isThrottled.current = true;
@@ -55,6 +59,11 @@ export default function StageController() {
       }, 750);
     }
   }, [activeStage]);
+
+  const handleSkipProjects = useCallback(() => {
+    setProjectModalIndex(null);
+    goToStage(4);
+  }, [goToStage]);
 
   const nextStage = useCallback(() => {
     if (isThrottled.current) return;
@@ -70,10 +79,31 @@ export default function StageController() {
       setTimeout(() => {
         isThrottled.current = false;
       }, 450);
+    } else if (activeStage === 3) {
+      // On Projects stage, open and step through project modals one by one
+      if (projectModalIndex === null) {
+        // First scroll on Projects page opens modal for Project 01
+        setProjectModalIndex(0);
+        isThrottled.current = true;
+        setTimeout(() => {
+          isThrottled.current = false;
+        }, 450);
+      } else if (projectModalIndex < 3) {
+        // Scroll steps to next project (01 -> 02 -> 03 -> 04)
+        setProjectModalIndex((prev) => (prev !== null ? prev + 1 : 0));
+        isThrottled.current = true;
+        setTimeout(() => {
+          isThrottled.current = false;
+        }, 450);
+      } else {
+        // After project 04 is finished, advance to Experience
+        setProjectModalIndex(null);
+        goToStage(4);
+      }
     } else if (activeStage < TOTAL_STAGES - 1) {
       goToStage(activeStage + 1);
     }
-  }, [activeStage, aboutCardStep, goToStage]);
+  }, [activeStage, aboutCardStep, projectModalIndex, goToStage]);
 
   const prevStage = useCallback(() => {
     if (isThrottled.current) return;
@@ -85,13 +115,32 @@ export default function StageController() {
       setTimeout(() => {
         isThrottled.current = false;
       }, 450);
+    } else if (activeStage === 3) {
+      // On Projects stage, step backwards through project modals
+      if (projectModalIndex !== null && projectModalIndex > 0) {
+        setProjectModalIndex((prev) => (prev !== null ? prev - 1 : null));
+        isThrottled.current = true;
+        setTimeout(() => {
+          isThrottled.current = false;
+        }, 450);
+      } else if (projectModalIndex === 0) {
+        // From project 01, close modal back to Projects overview
+        setProjectModalIndex(null);
+        isThrottled.current = true;
+        setTimeout(() => {
+          isThrottled.current = false;
+        }, 450);
+      } else {
+        // On Projects overview, scroll up returns to About
+        goToStage(2);
+      }
     } else if (activeStage > 0) {
       if (activeStage === 1) {
         setTriggerLandingExit(false);
       }
       goToStage(activeStage - 1);
     }
-  }, [activeStage, aboutCardStep, goToStage]);
+  }, [activeStage, aboutCardStep, projectModalIndex, goToStage]);
 
   const handleLandingAdvance = useCallback(() => {
     setActiveStage(1);
@@ -151,6 +200,11 @@ export default function StageController() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isThrottled.current) return;
 
+      if (e.key === 'Escape' && activeStage === 3 && projectModalIndex !== null) {
+        setProjectModalIndex(null);
+        return;
+      }
+
       if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
         e.preventDefault();
         nextStage();
@@ -162,7 +216,7 @@ export default function StageController() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [nextStage, prevStage]);
+  }, [nextStage, prevStage, activeStage, projectModalIndex]);
 
   const isLightMode = activeStage === 3;
 
@@ -234,7 +288,13 @@ export default function StageController() {
 
       {/* Stage 3: Projects Panel (Turns White as in Sketch, 4 Selected Works) */}
       <PanelWrapper stageIndex={3} activeStage={activeStage} id="stage-projects" isLight={true}>
-        <ProjectsPanel onAdvance={() => goToStage(4)} isActive={activeStage === 3} />
+        <ProjectsPanel
+          onAdvance={() => goToStage(4)}
+          isActive={activeStage === 3}
+          modalIndex={projectModalIndex}
+          onSetModalIndex={setProjectModalIndex}
+          onSkip={handleSkipProjects}
+        />
       </PanelWrapper>
 
       {/* Stage 4: Experience Panel (Turns Black again, Connected Graph) */}
